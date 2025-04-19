@@ -1,0 +1,217 @@
+@import url("https://fonts.googleapis.com/css2?family=Gluten:wght@100..900&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Gabarito:wght@400..900&display=swap");
+
+:root {
+  background-color: #be3d2a;
+  font-family: Gabarito;
+  color: white;
+}
+
+body {
+  margin: 0 auto;
+}
+
+.wrapper {
+  min-height: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+}
+
+h1 {
+  margin-left: 1.2em;
+  font-weight: 400;
+  font-family: Gluten;
+}
+
+main {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+}
+
+button:hover {
+  opacity: 0.92;
+}
+.buttons-section {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  margin-bottom: 4px;
+}
+
+.pomodoro-button {
+  font-family: Gabarito;
+  width: 120px;
+  height: 30px;
+  background-color: #d57d70;
+  border-style: none;
+  color: white;
+  font-size: 1rem;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.sbreak-button {
+  font-family: Gabarito;
+  width: 120px;
+  height: 30px;
+  background-color: #be3d2a;
+  border-style: none;
+  color: white;
+  font-size: 1rem;
+  border-radius: 4px;
+  cursor: pointer;
+}
+.lbreak-button {
+  font-family: Gabarito;
+  width: 120px;
+  height: 30px;
+  background-color: #be3d2a;
+  border-style: none;
+  color: white;
+  font-size: 1rem;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.main-card {
+  height: 270px;
+  width: 420px;
+  background-color: #d57d70;
+  /* display */
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: center;
+  border-radius: 8px;
+}
+
+.button-container {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: center;
+  gap: 12px;
+}
+
+.prompt-title {
+  padding-top: 6px;
+  margin: 0;
+}
+
+.main-time {
+  margin: 0;
+  font-size: 6.5rem;
+  color: #f2e1c9;
+}
+
+.start-button {
+  font-family: Poppins;
+  font-weight: 600;
+  color: #a44e4e;
+  background-color: #f2e1c9;
+  background-color: white;
+  font-size: 24px;
+  padding: 10px 60px 10px 60px;
+  border-radius: 5px;
+  border: none;
+  cursor: pointer;
+  box-shadow: inset 0px -4px 2px rgba(0, 0, 0, 0.2);
+}
+
+.start-button:active {
+  transform: translateY(4px);
+  box-shadow: inset 0px 0px 2px rgba(0, 0, 0, 0);
+}
+
+.add-task-button {
+  border: dotted 3px;
+  /* border-width: 3px; */
+  color: white;
+  background-color: #d07062;
+  width: 270px;
+  height: 40px;
+  font-family: Gabarito;
+  font-size: 1.1rem;
+  cursor: pointer;
+}
+
+.root-parent {
+  display: flex;
+  gap: 2rem;
+}
+
+.task-parent {
+  display: flex;
+  flex-direction: column;
+}
+.task-parent-parent {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+}
+
+.task-parent > p {
+  padding-bottom: 9px;
+  margin: 0;
+  font-size: 1rem;
+}
+
+.task-card {
+  height: 270px;
+  width: 230px;
+  background-color: #d57d70;
+  border-radius: 7px;
+}
+
+.quote-msg {
+  text-align: center;
+  font-family: Gluten;
+  font-weight: 100;
+  margin-top: 3rem;
+}
+
+.footer-parent {
+  display: flex;
+  flex-direction: row;
+  align-items: flex-start;
+  position: absolute;
+  bottom: 1rem;
+  left: 2rem;
+  /* gap: 17rem; */
+  /* width: 90%; */
+  /* width: 100vh; */
+}
+
+.footer-nav {
+  display: flex;
+  gap: 1.3rem;
+  /* justify-content: flex-end; */
+}
+
+.footer-nav a{
+  font-size: 1.1rem;
+  text-decoration: none;
+  color: white;
+}
+
+.footer-nav a:hover{
+  opacity: 0.8;
+}
+
+/* .footer-devs {
+  width: 30;
+  height: 100%;
+  border: black solid 1px;
+  display: flex;
+  flex-direction: column;
+}
+
+.footer-devs > p {
+  font-family: Gluten;
+  text-align: center;
+  font-weight: 100;
+  margin: 0;
+  font-size: 1rem;
+} */
