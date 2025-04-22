@@ -1,4 +1,17 @@
+import TaskList from './taskList'
+import data from './assets/taskData.js'
+
+
 function MainContent() {
+  const fetchedData = data.map((list) => {
+    return (
+      <TaskList 
+      key={list.id}
+      {...list}
+      />
+    )
+  })
+
   return (
     <main className="root-parent">
       <div>
@@ -25,9 +38,7 @@ function MainContent() {
           <div className="task-card">
             <ol>
               Task goes here...
-              <li>Study HCI</li>
-              <li>Study Arts</li>
-              <li>Hi</li>
+              {fetchedData}
             </ol>
           </div>
         </div>
