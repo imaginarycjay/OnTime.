@@ -22,6 +22,14 @@ body {
   gap: 2rem;
 }
 
+.main-nav {
+  display: flex;
+  justify-content: flex-start;
+  max-width: 100%;
+  margin-left: auto;
+  margin-right: auto;
+  /* border: red 1px solid; */
+}
 h1 {
   margin-left: 1.2em;
   font-weight: 400;
@@ -70,7 +78,6 @@ button:hover {
   transition: background-color 0.4s ease;
 }
 
-
 .lbreak-button {
   font-family: Gabarito;
   width: 120px;
@@ -85,17 +92,19 @@ button:hover {
 }
 
 .main-card {
+  max-width: 100%;
+  margin-left: auto;
+  margin-right: auto;
+  /* border: violet 2px solid; */
   height: 270px;
   width: 420px;
   background-color: var(--secondary-bg-color);
-  /* display */
   display: flex;
   flex-direction: column;
   justify-content: flex-start;
   align-items: center;
   border-radius: 8px;
   transition: background-color 0.4s ease;
-
 }
 
 .button-container {
@@ -130,7 +139,6 @@ button:hover {
   cursor: pointer;
   box-shadow: inset 0px -4px 2px rgba(0, 0, 0, 0.2);
   transition: color 0.4s ease;
-
 }
 
 .start-button:active {
@@ -155,12 +163,28 @@ button:hover {
 
 .root-parent {
   display: flex;
-  gap: 2rem;
+  align-items: center;
+  gap: 1rem;
+  max-width: 100%;
+  margin-left: auto;
+  margin-right: auto;
+  /* border: red 2px solid; */
+}
+
+.main-pomodoro {
+  max-width: 100%;
+  margin-left: auto;
+  margin-right: auto;
+  /* border: black 2px solid; */
 }
 
 .task-parent {
+  /* border: black 2px solid; */
   display: flex;
   flex-direction: column;
+  max-width: 100%;
+  margin-left: auto;
+  margin-right: auto;
 }
 .task-parent-parent {
   display: flex;
@@ -184,17 +208,17 @@ button:hover {
   transition: background-color 0.4s ease;
 }
 
-.task-card::-webkit-scrollbar{
+.task-card::-webkit-scrollbar {
   width: 6px;
 }
 
-.task-card::-webkit-scrollbar-thumb{
-  background-color:#d07062;
+.task-card::-webkit-scrollbar-thumb {
+  background-color: #d07062;
   border-top-right-radius: 4rem;
   border-bottom-right-radius: 4rem;
   /* border-radius: 6rem; */
 }
-.task-card::-webkit-scrollbar-track{
+.task-card::-webkit-scrollbar-track {
   /* background: #f1f1f1; */
   /* border-radius: 10px; */
   border-top-right-radius: 4rem;
@@ -226,13 +250,13 @@ button:hover {
   /* justify-content: flex-end; */
 }
 
-.footer-nav a{
+.footer-nav a {
   font-size: 1.1rem;
   text-decoration: none;
   color: white;
 }
 
-.footer-nav a:hover{
+.footer-nav a:hover {
   opacity: 0.8;
 }
 
@@ -259,12 +283,27 @@ button:hover {
   /* border: black solid 1px; */
 }
 
-/* @media (min-height: 375px) {
-  .footer-parent {
+@media (max-width: 425px) {
+  .root-parent {
+    flex-direction: column;
+    max-width: 90%;
+    margin-top: 1rem;
+    gap: 8px;
+  }
+
+  .task-parent {
+  }
+
+  .task-card {
+    height: auto;
+    width: 320px;
+  }
+  .footer-nav {
     display: none;
   }
 
-  nav {
-    max-width: 375px;
+  .quote-msg {
+    margin: 1rem 0.5rem 1rem 0.5rem;
+    font-size: 14px;
   }
-} */
+}

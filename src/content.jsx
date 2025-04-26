@@ -21,7 +21,7 @@ function MainContent() {
 
   return (
     <main className="root-parent">
-      <div>
+      <div className="main-pomodoro">
         <section className="buttons-section">
           <button
             onClick={() =>
@@ -92,7 +92,7 @@ function MainContent() {
 
       <div className="task-parent-parent">
         <div className="task-parent">
-          <p>Task List</p>
+          <p>Task List:</p>
           <div className="task-card">
             <ol>{fetchedData}</ol>
           </div>

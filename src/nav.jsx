@@ -1,6 +1,6 @@
 function Navigation () {
   return(
-    <nav>
+    <nav className="main-nav">
       <h1>
         OnTime.
       </h1>
