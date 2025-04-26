@@ -1,5 +1,5 @@
 function TaskList(prop) {
-  return <li>{prop.task}</li>
+  return <li className="task-items">{prop.task}</li>
 }
 
 export default TaskList

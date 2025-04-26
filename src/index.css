@@ -2,13 +2,17 @@
 @import url("https://fonts.googleapis.com/css2?family=Gabarito:wght@400..900&display=swap");
 
 :root {
-  background-color: #be3d2a;
   font-family: Gabarito;
-  color: white;
+  --main-text-color: white;
+  --primary-bg-color: #be3d2a;
+  --secondary-bg-color: #d57d70;
 }
 
 body {
   margin: 0 auto;
+  background-color: var(--primary-bg-color);
+  color: var(--main-text-color);
+  transition: background-color 0.4s ease;
 }
 
 .wrapper {
@@ -44,47 +48,54 @@ button:hover {
   font-family: Gabarito;
   width: 120px;
   height: 30px;
-  background-color: #d57d70;
+  background-color: var(--primary-bg-color);
   border-style: none;
   color: white;
   font-size: 1rem;
   border-radius: 4px;
   cursor: pointer;
+  transition: background-color 0.4s ease;
 }
 
 .sbreak-button {
   font-family: Gabarito;
   width: 120px;
   height: 30px;
-  background-color: #be3d2a;
+  background-color: var(--primary-bg-color);
   border-style: none;
   color: white;
   font-size: 1rem;
   border-radius: 4px;
   cursor: pointer;
+  transition: background-color 0.4s ease;
 }
+
+
 .lbreak-button {
   font-family: Gabarito;
   width: 120px;
   height: 30px;
-  background-color: #be3d2a;
+  background-color: var(--primary-bg-color);
   border-style: none;
   color: white;
   font-size: 1rem;
   border-radius: 4px;
   cursor: pointer;
+  transition: background-color 0.4s ease;
 }
 
 .main-card {
   height: 270px;
   width: 420px;
-  background-color: #d57d70;
+  background-color: var(--secondary-bg-color);
   /* display */
   display: flex;
   flex-direction: column;
   justify-content: flex-start;
   align-items: center;
   border-radius: 8px;
+  transition: background-color 0.4s ease;
+
 }
 
 .button-container {
@@ -103,13 +114,13 @@ button:hover {
 .main-time {
   margin: 0;
   font-size: 6.5rem;
-  color: #f2e1c9;
+  color: var(--main-text-color);
 }
 
 .start-button {
   font-family: Poppins;
   font-weight: 600;
-  color: #a44e4e;
+  color: var(--primary-bg-color);
   background-color: #f2e1c9;
   background-color: white;
   font-size: 24px;
@@ -118,6 +129,8 @@ button:hover {
   border: none;
   cursor: pointer;
   box-shadow: inset 0px -4px 2px rgba(0, 0, 0, 0.2);
+  transition: color 0.4s ease;
+
 }
 
 .start-button:active {
@@ -129,12 +142,15 @@ button:hover {
   border: dotted 3px;
   /* border-width: 3px; */
   color: white;
-  background-color: #d07062;
+  background-color: var(--secondary-bg-color);
+  opacity: 50%;
   width: 270px;
   height: 40px;
   font-family: Gabarito;
   font-size: 1.1rem;
   cursor: pointer;
+  transition: background-color 0.4s ease;
+  /* transition: opacity 0.4s ease; */
 }
 
 .root-parent {
@@ -161,8 +177,28 @@ button:hover {
 .task-card {
   height: 270px;
   width: 230px;
-  background-color: #d57d70;
+  background-color: var(--secondary-bg-color);
   border-radius: 7px;
+  overflow: hidden;
+  overflow-y: scroll;
+  transition: background-color 0.4s ease;
+}
+
+.task-card::-webkit-scrollbar{
+  width: 6px;
+}
+
+.task-card::-webkit-scrollbar-thumb{
+  background-color:#d07062;
+  border-top-right-radius: 4rem;
+  border-bottom-right-radius: 4rem;
+  /* border-radius: 6rem; */
+}
+.task-card::-webkit-scrollbar-track{
+  /* background: #f1f1f1; */
+  /* border-radius: 10px; */
+  border-top-right-radius: 4rem;
+  border-bottom-right-radius: 4rem;
 }
 
 .quote-msg {
@@ -214,4 +250,21 @@ button:hover {
   font-weight: 100;
   margin: 0;
   font-size: 1rem;
+} */
+
+.task-items {
+  font-size: 1rem;
+  max-width: 90%;
+  max-height: 90%;
+  /* border: black solid 1px; */
+}
+
+/* @media (min-height: 375px) {
+  .footer-parent {
+    display: none;
+  }
+
+  nav {
+    max-width: 375px;
+  }
 } */

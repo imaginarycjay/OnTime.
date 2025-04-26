@@ -5,12 +5,14 @@ import Quote from "./quote.jsx";
 
 function App() {
   return (
-    <div className="wrapper">
+    <>
       <AwesomeNavigation />
-      <AwesomeContent />
-      <Quote msg="It's not how much time you have, it's how you use it -Ekko" />
-      <AwesomeFooter />
-    </div>
+      <div className="wrapper">
+        <AwesomeContent />
+        <Quote msg="It's not how much time you have, it's how you use it -Ekko" />
+        <AwesomeFooter />
+      </div>
+    </>
   );
 }
 
