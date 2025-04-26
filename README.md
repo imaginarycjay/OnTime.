@@ -1,12 +1,12 @@
-# React + Vite
+# OnTime: A Pomodoro App With Task Management
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+Welcome to OnTime — a simple Pomodoro app that helps you stay focused and manage your tasks!
 
-Currently, two official plugins are available:
+This project is currently under development.
+I'm also currently learning React, and this app is a small project I'm building for my college subject, Human-Computer Interactions.
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+-The goal of OnTime is to:
+-Help users manage their tasks easily
+-Stay focused using the Pomodoro technique
 
-## Expanding the ESLint configuration
-
-If you are developing a production application, we recommend using TypeScript and enable type-aware lint rules. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+Practice good design and usability principles from what I've learned in class
