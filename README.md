@@ -10,4 +10,4 @@ The goal of OnTime is to:
 - Stay focused using the Pomodoro technique
 - Practice good design and usability principles from what I've learned in class
 
-### Launch the web app using this link: [Visit OnTime.](ontime-pomodoro.vercel.app)
+### Launch the web app using this link: [Visit OnTime. Pomodoro](https://ontime-pomodoro.vercel.app)
