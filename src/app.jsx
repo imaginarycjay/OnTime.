@@ -1,16 +1,16 @@
-import AwesomeNavigation from "./nav.jsx";
-import AwesomeContent from "./content.jsx";
-import AwesomeFooter from "./footer.jsx";
+import Nav from "./nav.jsx";
+import MainContent from "./content.jsx";
 import Quote from "./quote.jsx";
+import Footer from "./footer.jsx";
 
 function App() {
   return (
     <>
-      <AwesomeNavigation />
+      <Nav />
       <div className="wrapper">
-        <AwesomeContent />
+        <MainContent />
         <Quote msg="It's not how much time you have, it's how you use it -Ekko" />
-        <AwesomeFooter />
+        <Footer />
       </div>
     </>
   );

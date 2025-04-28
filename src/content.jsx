@@ -1,11 +1,10 @@
-import TaskList from "./taskList";
-import data from "./assets/taskData.js";
 import { useState } from "react";
 
 function MainContent() {
   const [state, setState] = useState("25:00");
   const [activeBtn, setActiveBtn] = useState("pomodoro");
   const [focusType, setFocusType] = useState("Time to Focus!");
+  const [list, setList] = useState(["Cook"]);
 
   const handleClick = (type, time, focus, bg, bg2) => {
     setState(time);
@@ -13,15 +12,17 @@ function MainContent() {
     setFocusType(focus);
     document.documentElement.style.setProperty("--primary-bg-color", bg);
     document.documentElement.style.setProperty("--secondary-bg-color", bg2);
-  };
+  };  
 
-  const fetchedData = data.map((list) => {
-    return <TaskList key={list.id} {...list} />;
-  });
+  const fetchedData = list.map((items) => {
+    return <li>{items}</li>
+  })
+
 
   return (
     <main className="root-parent">
       <div className="main-pomodoro">
+        
         <section className="buttons-section">
           <button
             onClick={() =>
