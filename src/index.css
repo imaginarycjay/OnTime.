@@ -105,6 +105,7 @@ button:hover {
   align-items: center;
   border-radius: 8px;
   transition: background-color 0.4s ease;
+  box-shadow: rgba(0, 0, 0, 0.07) 0px 1px 1px, rgba(0, 0, 0, 0.07) 0px 2px 2px, rgba(0, 0, 0, 0.07) 0px 4px 4px, rgba(0, 0, 0, 0.07) 0px 8px 8px, rgba(0, 0, 0, 0.07) 0px 16px 16px;
 }
 
 .button-container {
@@ -163,7 +164,7 @@ button:hover {
 
 .root-parent {
   display: flex;
-  align-items: center;
+  align-items: baseline;
   gap: 1rem;
   max-width: 100%;
   margin-left: auto;
@@ -200,12 +201,13 @@ button:hover {
 
 .task-card {
   height: 270px;
-  width: 230px;
+  width: 320px;
   background-color: var(--secondary-bg-color);
   border-radius: 7px;
   overflow: hidden;
   overflow-y: scroll;
   transition: background-color 0.4s ease;
+  box-shadow: rgba(0, 0, 0, 0.07) 0px 1px 1px, rgba(0, 0, 0, 0.07) 0px 2px 2px, rgba(0, 0, 0, 0.07) 0px 4px 4px, rgba(0, 0, 0, 0.07) 0px 8px 8px, rgba(0, 0, 0, 0.07) 0px 16px 16px;
 }
 
 .task-card::-webkit-scrollbar {
@@ -260,27 +262,120 @@ button:hover {
   opacity: 0.8;
 }
 
-/* .footer-devs {
-  width: 30;
-  height: 100%;
-  border: black solid 1px;
-  display: flex;
-  flex-direction: column;
-}
-
-.footer-devs > p {
-  font-family: Gluten;
-  text-align: center;
-  font-weight: 100;
-  margin: 0;
-  font-size: 1rem;
-} */
-
 .task-items {
   font-size: 1rem;
   max-width: 90%;
   max-height: 90%;
-  /* border: black solid 1px; */
+  display: flex;
+  justify-content: space-between;
+}
+
+.delete-task {
+  border: none;
+  color: red;
+  background-color: var(--secondary-bg-color);
+  cursor: pointer;
+}
+
+.no-task-msg {
+  font-size: 1rem;
+  text-align: center;
+  margin-top: 6rem;
+  margin-left: 5px;
+  width: 100%;
+  font-weight: 200;
+}
+
+/* modal section */
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  bottom: 0;
+  right: 0;
+  left: 0;
+  background-color: rgba(0, 0, 0, 0.6);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.modal-container {
+  background-color: var(--secondary-bg-color);
+  width: 35%;
+  height: 30%;
+  border-radius: 10px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.modal-container > form {
+  width: auto;
+  height: 30%;
+  margin-top: 2rem;
+  /* border: 1px red solid; */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.modal-container > form > input {
+  width: 85%;
+  height: 80%;
+  border: var(--secondary-bg-color) 1px solid;
+  padding-left: 1rem;
+  font-family: Poppins;
+  font-size: larger;
+  box-shadow: rgba(50, 50, 93, 0.25) 0px 6px 12px -2px,
+    rgba(0, 0, 0, 0.3) 0px 3px 7px -3px;
+  border-radius: 6px;
+}
+
+.modal-input:focus {
+  outline: none;
+}
+
+.modal-buttons-container {
+  height: 23%;
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  border-radius: 10px;
+}
+
+.modal-buttons {
+  display: flex;
+  align-items: baseline;
+  gap: 10px;
+  margin-right: 5%;
+}
+
+.modal-add-butt {
+  width: 85px;
+  height: 30px;
+  background-color: var(--primary-bg-color);
+  color: white;
+  font-family: Poppins;
+  border: rgba(0, 0, 0, 0.2);
+  cursor: pointer;
+  box-shadow: rgba(50, 50, 93, 0.25) 0px 6px 12px -2px,
+    rgba(0, 0, 0, 0.3) 0px 3px 7px -3px;
+}
+.modal-cancel-butt {
+  width: 85px;
+  height: 30px;
+  background-color: white;
+  border: none;
+  font-family: Poppins;
+  cursor: pointer;
+  transition: all 0.2s;
+  box-shadow: rgba(50, 50, 93, 0.25) 0px 6px 12px -2px,
+    rgba(0, 0, 0, 0.3) 0px 3px 7px -3px;
+}
+
+.modal-cancel-butt:hover {
+  background-color: red;
+  color: white;
 }
 
 @media (max-width: 425px) {
@@ -289,14 +384,14 @@ button:hover {
     max-width: 90%;
     margin-top: 1rem;
     gap: 8px;
-  }
-
-  .task-parent {
+    align-items: center;
   }
 
   .task-card {
-    height: auto;
     width: 320px;
+    max-height: 150px;
+    overflow: hidden;
+    overflow-y: scroll;
   }
   .footer-nav {
     display: none;
@@ -306,4 +401,15 @@ button:hover {
     margin: 1rem 0.5rem 1rem 0.5rem;
     font-size: 14px;
   }
+
+  .no-task-msg {
+    margin-top: 4rem;
+  }
+
+  .modal-container{
+    width: 90%;
+    height: 25%;
+  }
+
+
 }

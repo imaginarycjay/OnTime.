@@ -4,25 +4,53 @@ function MainContent() {
   const [state, setState] = useState("25:00");
   const [activeBtn, setActiveBtn] = useState("pomodoro");
   const [focusType, setFocusType] = useState("Time to Focus!");
-  const [list, setList] = useState(["Cook"]);
+  const [modalOpen, setModalOpen] = useState(false);
+  const [list, setList] = useState([]);
 
+  //function if the pomo, break, longbreak is clicked.
   const handleClick = (type, time, focus, bg, bg2) => {
     setState(time);
     setActiveBtn(type);
     setFocusType(focus);
     document.documentElement.style.setProperty("--primary-bg-color", bg);
     document.documentElement.style.setProperty("--secondary-bg-color", bg2);
-  };  
+  };
 
-  const fetchedData = list.map((items) => {
-    return <li>{items}</li>
-  })
+  //map through list
+  const fetchedData = list.map((items, index) => {
+    return (
+      <li className="task-items" key={index}>
+        {items}
+        <button onClick={() => deleteTask(index)} className="delete-task">
+          🗑
+        </button>
+      </li>
+    );
+  });
 
+  // delete function for task
+  function deleteTask(index) {
+    const returnedTask = list.filter((_, i) => i !== index);
+    setList(returnedTask);
+  }
+
+  // function for close open modall aksjdsjd
+  function toggleModal() {
+    setModalOpen((prev) => !prev);
+  }
+
+  // get form data from modal
+  function getDataModal(e) {
+    const data = e.get("result");
+    setList((prev) => [...prev, data]);
+  }
+
+  // add item to list when add button in modal is clicked
+  function addItem() {}
 
   return (
     <main className="root-parent">
       <div className="main-pomodoro">
-        
         <section className="buttons-section">
           <button
             onClick={() =>
@@ -85,7 +113,9 @@ function MainContent() {
             <p className="main-time">{state}</p>
             <div className="button-container">
               <button className="start-button">START</button>
-              <button className="add-task-button">Add Task +</button>
+              <button onClick={toggleModal} className="add-task-button">
+                Add Task +
+              </button>
             </div>
           </div>
         </div>
@@ -95,10 +125,39 @@ function MainContent() {
         <div className="task-parent">
           <p>Task List:</p>
           <div className="task-card">
-            <ol>{fetchedData}</ol>
+            {list.length === 0 && (
+              <h2 className="no-task-msg">Add task to see the list...</h2>
+            )}
+            <ul>{fetchedData}</ul>
           </div>
         </div>
       </div>
+
+      {modalOpen && (
+        <section className="modal-overlay">
+          <div className="modal-container">
+            <form id="modal-form" action={getDataModal}>
+              <input
+                className="modal-input"
+                type="text"
+                name="result"
+                required
+                placeholder="Add task here..."
+              />
+            </form>
+            <div className="modal-buttons-container">
+              <div className="modal-buttons">
+                <button onClick={toggleModal} className="modal-cancel-butt">
+                  Close
+                </button>
+                <button onClick={() => getDataModal} form="modal-form" className="modal-add-butt">
+                  Add
+                </button>
+              </div>
+            </div>
+          </div>
+        </section>
+      )}
     </main>
   );
 }

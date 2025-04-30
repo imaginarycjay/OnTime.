@@ -10,7 +10,7 @@ function App() {
       <div className="wrapper">
         <MainContent />
         <Quote msg="It's not how much time you have, it's how you use it -Ekko" />
-        <Footer />
+        {/* <Footer /> */}
       </div>
     </>
   );
