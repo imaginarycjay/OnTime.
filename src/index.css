@@ -105,7 +105,9 @@ button:hover {
   align-items: center;
   border-radius: 8px;
   transition: background-color 0.4s ease;
-  box-shadow: rgba(0, 0, 0, 0.07) 0px 1px 1px, rgba(0, 0, 0, 0.07) 0px 2px 2px, rgba(0, 0, 0, 0.07) 0px 4px 4px, rgba(0, 0, 0, 0.07) 0px 8px 8px, rgba(0, 0, 0, 0.07) 0px 16px 16px;
+  box-shadow: rgba(0, 0, 0, 0.07) 0px 1px 1px, rgba(0, 0, 0, 0.07) 0px 2px 2px,
+    rgba(0, 0, 0, 0.07) 0px 4px 4px, rgba(0, 0, 0, 0.07) 0px 8px 8px,
+    rgba(0, 0, 0, 0.07) 0px 16px 16px;
 }
 
 .button-container {
@@ -207,7 +209,9 @@ button:hover {
   overflow: hidden;
   overflow-y: scroll;
   transition: background-color 0.4s ease;
-  box-shadow: rgba(0, 0, 0, 0.07) 0px 1px 1px, rgba(0, 0, 0, 0.07) 0px 2px 2px, rgba(0, 0, 0, 0.07) 0px 4px 4px, rgba(0, 0, 0, 0.07) 0px 8px 8px, rgba(0, 0, 0, 0.07) 0px 16px 16px;
+  box-shadow: rgba(0, 0, 0, 0.07) 0px 1px 1px, rgba(0, 0, 0, 0.07) 0px 2px 2px,
+    rgba(0, 0, 0, 0.07) 0px 4px 4px, rgba(0, 0, 0, 0.07) 0px 8px 8px,
+    rgba(0, 0, 0, 0.07) 0px 16px 16px;
 }
 
 .task-card::-webkit-scrollbar {
@@ -293,10 +297,11 @@ button:hover {
   bottom: 0;
   right: 0;
   left: 0;
-  background-color: rgba(0, 0, 0, 0.6);
+  background-color: rgba(0, 0, 0, 0.3);
   display: flex;
   justify-content: center;
   align-items: center;
+  backdrop-filter: blur(3px);
 }
 
 .modal-container {
@@ -348,9 +353,11 @@ button:hover {
   align-items: baseline;
   gap: 10px;
   margin-right: 5%;
+  margin-bottom: 5%;
 }
 
 .modal-add-butt {
+  border-radius: 4px;
   width: 85px;
   height: 30px;
   background-color: var(--primary-bg-color);
@@ -362,6 +369,7 @@ button:hover {
     rgba(0, 0, 0, 0.3) 0px 3px 7px -3px;
 }
 .modal-cancel-butt {
+  border-radius: 4px;
   width: 85px;
   height: 30px;
   background-color: white;
@@ -406,10 +414,8 @@ button:hover {
     margin-top: 4rem;
   }
 
-  .modal-container{
+  .modal-container {
     width: 90%;
     height: 25%;
   }
-
-
 }

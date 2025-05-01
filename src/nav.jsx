@@ -1,10 +1,13 @@
+import { motion } from "framer-motion"
+
 function Navigation () {
+  
   return(
-    <nav className="main-nav">
+    <motion.nav initial={{opacity: 0, y: -100}} animate={{opacity: 1, y: 0, transition: {duration: 1.7}}} className="main-nav">
       <h1>
         OnTime.
       </h1>
-    </nav>
+    </motion.nav>
   )
 }
 

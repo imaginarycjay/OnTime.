@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { motion, AnimatePresence} from "framer-motion";
 
 function MainContent() {
   const [state, setState] = useState("25:00");
@@ -45,12 +46,23 @@ function MainContent() {
     setList((prev) => [...prev, data]);
   }
 
-  // add item to list when add button in modal is clicked
-  function addItem() {}
+  //animation when add task is clicked (try lang)
+  const animateTest = {
+    entrance: {
+      enterLeft: {opacity: 0, x: -500},
+      animateLeft: {opacity: 1, x: 0, transition: {duration: 0.6}},
+      enterUp: {opacity: 0, y: -500},
+      animateUp: {opacity: 1, y: 0, transition: {duration: 1}}
+    },
+    initial: { opacity: 0, scale: 0 },
+    animate: { opacity: 1, scale: 1 },
+    exit: { opacity: 0, scale: 0 },
+    transition: { duration: 0.2 },
+  };
 
   return (
     <main className="root-parent">
-      <div className="main-pomodoro">
+      <motion.div initial={animateTest.entrance.enterLeft} animate={animateTest.entrance.animateLeft} className="main-pomodoro">
         <section className="buttons-section">
           <button
             onClick={() =>
@@ -119,9 +131,9 @@ function MainContent() {
             </div>
           </div>
         </div>
-      </div>
+      </motion.div>
 
-      <div className="task-parent-parent">
+      <motion.div initial={animateTest.entrance.enterUp} animate={animateTest.entrance.animateUp} className="task-parent-parent">
         <div className="task-parent">
           <p>Task List:</p>
           <div className="task-card">
@@ -131,33 +143,45 @@ function MainContent() {
             <ul>{fetchedData}</ul>
           </div>
         </div>
-      </div>
+      </motion.div>
 
-      {modalOpen && (
-        <section className="modal-overlay">
-          <div className="modal-container">
-            <form id="modal-form" action={getDataModal}>
-              <input
-                className="modal-input"
-                type="text"
-                name="result"
-                required
-                placeholder="Add task here..."
-              />
-            </form>
-            <div className="modal-buttons-container">
-              <div className="modal-buttons">
-                <button onClick={toggleModal} className="modal-cancel-butt">
-                  Close
-                </button>
-                <button onClick={() => getDataModal} form="modal-form" className="modal-add-butt">
-                  Add
-                </button>
+      <AnimatePresence>
+        {modalOpen && (
+          <section className="modal-overlay">
+            <motion.div
+              initial={animateTest.initial}
+              animate={animateTest.animate}
+              exit={animateTest.exit}
+              transition={animateTest.transition}
+              className="modal-container"
+            >
+              <form id="modal-form" action={getDataModal}>
+                <input
+                  className="modal-input"
+                  type="text"
+                  name="result"
+                  required
+                  placeholder="Add task here..."
+                />
+              </form>
+              <div className="modal-buttons-container">
+                <div className="modal-buttons">
+                  <button onClick={toggleModal} className="modal-cancel-butt">
+                    Close
+                  </button>
+                  <button
+                    onClick={() => getDataModal}
+                    form="modal-form"
+                    className="modal-add-butt"
+                  >
+                    Add
+                  </button>
+                </div>
               </div>
-            </div>
-          </div>
-        </section>
-      )}
+            </motion.div>
+          </section>
+        )}
+      </AnimatePresence>
     </main>
   );
 }
