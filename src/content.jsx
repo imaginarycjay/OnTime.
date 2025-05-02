@@ -1,5 +1,7 @@
 import { useState } from "react";
-import { motion, AnimatePresence} from "framer-motion";
+import { motion, AnimatePresence } from "framer-motion";
+import TaskManager from "./tasks.jsx";
+import deleteSVG from "./assets/delete.svg";
 
 function MainContent() {
   const [state, setState] = useState("25:00");
@@ -21,9 +23,9 @@ function MainContent() {
   const fetchedData = list.map((items, index) => {
     return (
       <li className="task-items" key={index}>
-        {items}
+        • {items}
         <button onClick={() => deleteTask(index)} className="delete-task">
-          🗑
+          <img className="task-delete-button" src={deleteSVG} />
         </button>
       </li>
     );
@@ -49,10 +51,10 @@ function MainContent() {
   //animation when add task is clicked (try lang)
   const animateTest = {
     entrance: {
-      enterLeft: {opacity: 0, x: -500},
-      animateLeft: {opacity: 1, x: 0, transition: {duration: 0.6}},
-      enterUp: {opacity: 0, y: -500},
-      animateUp: {opacity: 1, y: 0, transition: {duration: 1}}
+      enterLeft: { opacity: 0, x: -500 },
+      animateLeft: { opacity: 1, x: 0, transition: { duration: 0.6 } },
+      enterUp: { opacity: 0, y: -500 },
+      animateUp: { opacity: 1, y: 0, transition: { duration: 1 } },
     },
     initial: { opacity: 0, scale: 0 },
     animate: { opacity: 1, scale: 1 },
@@ -60,9 +62,15 @@ function MainContent() {
     transition: { duration: 0.2 },
   };
 
+  const AnimatedTaskManager = motion(TaskManager);
+
   return (
     <main className="root-parent">
-      <motion.div initial={animateTest.entrance.enterLeft} animate={animateTest.entrance.animateLeft} className="main-pomodoro">
+      <motion.div
+        initial={animateTest.entrance.enterLeft}
+        animate={animateTest.entrance.animateLeft}
+        className="main-pomodoro"
+      >
         <section className="buttons-section">
           <button
             onClick={() =>
@@ -133,17 +141,12 @@ function MainContent() {
         </div>
       </motion.div>
 
-      <motion.div initial={animateTest.entrance.enterUp} animate={animateTest.entrance.animateUp} className="task-parent-parent">
-        <div className="task-parent">
-          <p>Task List:</p>
-          <div className="task-card">
-            {list.length === 0 && (
-              <h2 className="no-task-msg">Add task to see the list...</h2>
-            )}
-            <ul>{fetchedData}</ul>
-          </div>
-        </div>
-      </motion.div>
+      <AnimatedTaskManager
+        taskList={list.length}
+        taskData={fetchedData}
+        initial={animateTest.entrance.enterUp}
+        animate={animateTest.entrance.animateUp}
+      />
 
       <AnimatePresence>
         {modalOpen && (
