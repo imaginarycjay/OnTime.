@@ -53,16 +53,12 @@ function MainContent() {
     entrance: {
       enterLeft: { opacity: 0, x: -500 },
       animateLeft: { opacity: 1, x: 0, transition: { duration: 0.6 } },
-      enterUp: { opacity: 0, y: -500 },
-      animateUp: { opacity: 1, y: 0, transition: { duration: 1 } },
     },
     initial: { opacity: 0, scale: 0 },
     animate: { opacity: 1, scale: 1 },
     exit: { opacity: 0, scale: 0 },
     transition: { duration: 0.2 },
   };
-
-  const AnimatedTaskManager = motion(TaskManager);
 
   return (
     <main className="root-parent">
@@ -141,12 +137,7 @@ function MainContent() {
         </div>
       </motion.div>
 
-      <AnimatedTaskManager
-        taskList={list.length}
-        taskData={fetchedData}
-        initial={animateTest.entrance.enterUp}
-        animate={animateTest.entrance.animateUp}
-      />
+      <TaskManager taskList={list.length} taskData={fetchedData} />
 
       <AnimatePresence>
         {modalOpen && (

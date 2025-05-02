@@ -1,6 +1,6 @@
-export default function Task({taskList, taskData, ...animate}) {
+export default function Task({taskList, taskData}) {
   return (
-    <div {...animate} className="task-parent-parent">
+    <div className="task-parent-parent">
       <div className="task-parent">
         <p>Task List:</p>
         <div className="task-card">
@@ -12,22 +12,4 @@ export default function Task({taskList, taskData, ...animate}) {
       </div>
     </div>
   );
-}
-
-{
-  /* <motion.div
-  initial={animateTest.entrance.enterUp}
-  animate={animateTest.entrance.animateUp}
-  className="task-parent-parent"
->
-  <div className="task-parent">
-    <p>Task List:</p>
-    <div className="task-card">
-      {list.length === 0 && (
-        <h2 className="no-task-msg">Add task to see the list...</h2>
-      )}
-      <ul>{fetchedData}</ul>
-    </div>
-  </div>
-</motion.div>; */
 }
