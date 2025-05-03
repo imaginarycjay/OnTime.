@@ -1,7 +1,7 @@
 import { useState } from "react";
-import { motion, AnimatePresence } from "framer-motion";
+import { motion } from "framer-motion";
 import TaskManager from "./tasks.jsx";
-import deleteSVG from "./assets/delete.svg";
+import Modal from "./modal.jsx";
 
 function MainContent() {
   const [state, setState] = useState("25:00");
@@ -19,23 +19,6 @@ function MainContent() {
     document.documentElement.style.setProperty("--secondary-bg-color", bg2);
   };
 
-  //map through list
-  const fetchedData = list.map((items, index) => {
-    return (
-      <li className="task-items" key={index}>
-        • {items}
-        <button onClick={() => deleteTask(index)} className="delete-task">
-          <img className="task-delete-button" src={deleteSVG} />
-        </button>
-      </li>
-    );
-  });
-
-  // delete function for task
-  function deleteTask(index) {
-    const returnedTask = list.filter((_, i) => i !== index);
-    setList(returnedTask);
-  }
 
   // function for close open modall aksjdsjd
   function toggleModal() {
@@ -137,45 +120,11 @@ function MainContent() {
         </div>
       </motion.div>
 
-      <TaskManager taskList={list.length} taskData={fetchedData} />
-
-      <AnimatePresence>
-        {modalOpen && (
-          <section className="modal-overlay">
-            <motion.div
-              initial={animateTest.initial}
-              animate={animateTest.animate}
-              exit={animateTest.exit}
-              transition={animateTest.transition}
-              className="modal-container"
-            >
-              <form id="modal-form" action={getDataModal}>
-                <input
-                  className="modal-input"
-                  type="text"
-                  name="result"
-                  required
-                  placeholder="Add task here..."
-                />
-              </form>
-              <div className="modal-buttons-container">
-                <div className="modal-buttons">
-                  <button onClick={toggleModal} className="modal-cancel-butt">
-                    Close
-                  </button>
-                  <button
-                    onClick={() => getDataModal}
-                    form="modal-form"
-                    className="modal-add-butt"
-                  >
-                    Add
-                  </button>
-                </div>
-              </div>
-            </motion.div>
-          </section>
-        )}
-      </AnimatePresence>
+            {/* task component */}
+      <TaskManager taskList={list.length} list={list} setList={setList} />
+            {/* modal component */}
+      {modalOpen && <Modal grabData={getDataModal} openModal={toggleModal} />}
+      
     </main>
   );
 }
