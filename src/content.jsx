@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
 import TaskManager from "./tasks.jsx";
 import Modal from "./modal.jsx";
@@ -8,8 +8,10 @@ function MainContent() {
   const [activeBtn, setActiveBtn] = useState("pomodoro");
   const [focusType, setFocusType] = useState("Time to Focus!");
   const [modalOpen, setModalOpen] = useState(false);
-  const [list, setList] = useState([]);
-
+  const [list, setList] = useState(() => {
+    const stored = localStorage.getItem("myTODOs");
+    return stored ? JSON.parse(stored) : [];
+  });
   //function if the pomo, break, longbreak is clicked.
   const handleClick = (type, time, focus, bg, bg2) => {
     setState(time);
@@ -19,8 +21,7 @@ function MainContent() {
     document.documentElement.style.setProperty("--secondary-bg-color", bg2);
   };
 
-
-  // function for close open modall aksjdsjd
+  // function for close open modal
   function toggleModal() {
     setModalOpen((prev) => !prev);
   }
@@ -120,11 +121,10 @@ function MainContent() {
         </div>
       </motion.div>
 
-            {/* task component */}
+      {/* task component */}
       <TaskManager taskList={list.length} list={list} setList={setList} />
-            {/* modal component */}
+      {/* modal component */}
       {modalOpen && <Modal grabData={getDataModal} openModal={toggleModal} />}
-      
     </main>
   );
 }

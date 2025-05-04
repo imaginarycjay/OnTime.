@@ -1,4 +1,5 @@
 import { motion, AnimatePresence } from "framer-motion";
+import { useEffect } from "react";
 import deleteSVG from "./assets/delete.svg";
 
 export default function Task({ taskList, list, setList }) {
@@ -7,6 +8,11 @@ export default function Task({ taskList, list, setList }) {
     const returnedTask = list.filter((_, i) => i !== index);
     setList(returnedTask);
   }
+
+  // Save to localStorage when list changes
+  useEffect(() => {
+    localStorage.setItem("myTODOs", JSON.stringify(list));
+  }, [list]);
 
   return (
     <motion.div
