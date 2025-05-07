@@ -96,7 +96,7 @@ function MainContent() {
             onClick={() =>
               handleClick(
                 "pomodoro",
-                5,
+                25 * 60,
                 setTimeRunning(false),
                 "Time to Focus",
                 "#be3d2a",
