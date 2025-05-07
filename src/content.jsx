@@ -14,6 +14,9 @@ function MainContent() {
     return stored ? JSON.parse(stored) : [];
   });
 
+  // Create audio element
+  const alarmSound = new Audio("https://assets.mixkit.co/active_storage/sfx/2869/2869-preview.mp3");
+
   // handle time logic
   useEffect(() => {
     let realTime;
@@ -26,9 +29,15 @@ function MainContent() {
     }
 
     //stops when the time is 0 with extra error handling
-    if (realTime === 0) {
+    if (currentTime === 0) {
       setTimeRunning(false);
-      alert('Focus done, time for a short break!')
+
+      // Play sound first
+      alarmSound.play()
+      // Then show alert
+      setTimeout(() => {
+        alert("Your time is up!");
+      }, 100);
     }
 
     return () => {
@@ -72,23 +81,11 @@ function MainContent() {
     setList((prev) => [...prev, data]);
   }
 
-  //animation when add task is clicked (try lang)
-  const animateTest = {
-    entrance: {
-      enterLeft: { opacity: 0, x: -500 },
-      animateLeft: { opacity: 1, x: 0, transition: { duration: 0.6 } },
-    },
-    initial: { opacity: 0, scale: 0 },
-    animate: { opacity: 1, scale: 1 },
-    exit: { opacity: 0, scale: 0 },
-    transition: { duration: 0.2 },
-  };
-
   return (
     <main className="root-parent">
       <motion.div
-        initial={animateTest.entrance.enterLeft}
-        animate={animateTest.entrance.animateLeft}
+        initial={{ opacity: 0, x: -500 }}
+        animate={{ opacity: 1, x: 0, transition: { duration: 0.6 } }}
         className="main-pomodoro"
       >
         <section className="buttons-section">
