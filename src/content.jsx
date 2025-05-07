@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
 import TaskManager from "./tasks.jsx";
 import Modal from "./modal.jsx";
+import clockRing from "./assets/alarm.mp3";
 
 function MainContent() {
   const [currentTime, setCurrentTime] = useState(25 * 60);
@@ -15,7 +16,7 @@ function MainContent() {
   });
 
   // Create audio element
-  const alarmSound = new Audio("https://assets.mixkit.co/active_storage/sfx/2869/2869-preview.mp3");
+  const alarmSound = new Audio(clockRing);
 
   // handle time logic
   useEffect(() => {
@@ -37,7 +38,7 @@ function MainContent() {
       // Then show alert
       setTimeout(() => {
         alert("Your time is up!");
-      }, 100);
+      }, 2000);
     }
 
     return () => {
