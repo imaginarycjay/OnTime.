@@ -283,7 +283,21 @@ button:hover {
   transition: background-color 0.4s ease;
 }
 
+.edit-task {
+  margin-top: 1.5%;
+  background-color: var(--secondary-bg-color);
+  cursor: pointer;
+  border: none;
+  transition: background-color 0.4s ease;
+}
+
 .task-delete-button {
+  height: 1rem;
+  width: 1rem;
+  object-fit: contain;
+}
+
+.task-edit-button {
   height: 1rem;
   width: 1rem;
   object-fit: contain;

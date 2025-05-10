@@ -1,18 +1,33 @@
 import { motion } from "framer-motion";
+import { useState, useEffect } from "react";
 
-export default function Modal({ grabData, openModal, ...others }) {
+export default function Modal({ grabData, openModal, initialValue = "", isEditing = false }) {
+  const [inputValue, setInputValue] = useState(initialValue);
+
+  // Update input value when initialValue changes
+  useEffect(() => {
+    setInputValue(initialValue);
+  }, [initialValue]);
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    grabData({ result: inputValue, isEditing });
+    openModal();
+  };
+
   return (
-    <section {...others} className="modal-overlay">
+    <section className="modal-overlay">
       <motion.div
         initial={{ opacity: 0, scale: 0 }}
         animate={{ opacity: 1, scale: 1 }}
         className="modal-container"
       >
-        <form id="modal-form" action={grabData}>
+        <form id="modal-form" onSubmit={handleSubmit}>
           <input
             className="modal-input"
             type="text"
-            name="result"
+            value={inputValue}
+            onChange={(e) => setInputValue(e.target.value)}
             required
             placeholder="Add task here..."
           />
@@ -23,11 +38,11 @@ export default function Modal({ grabData, openModal, ...others }) {
               Close
             </button>
             <button
-              onClick={() => grabData}
+              type="submit"
               form="modal-form"
               className="modal-add-butt"
             >
-              Add
+              {isEditing ? "Save" : "Add"}
             </button>
           </div>
         </div>

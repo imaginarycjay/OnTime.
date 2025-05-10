@@ -1,12 +1,17 @@
 import { motion, AnimatePresence } from "framer-motion";
 import { useEffect } from "react";
 import deleteSVG from "./assets/delete.svg";
+import editSVG from "./assets/edit-icon.svg";
 
-export default function Task({ taskList, list, setList }) {
+export default function Task({ taskList, list, setList, setEditingData }) {
   // delete function for task
   function deleteTask(index) {
     const returnedTask = list.filter((_, i) => i !== index);
     setList(returnedTask);
+  }
+
+  function editTask(index) {
+    setEditingData({ index, text: list[index] });
   }
 
   // Save to localStorage when list changes
@@ -47,12 +52,28 @@ export default function Task({ taskList, list, setList }) {
                     key={index}
                   >
                     • {items}
-                    <button
-                      onClick={() => deleteTask(index)}
-                      className="delete-task"
-                    >
-                      <img className="task-delete-button" src={deleteSVG} />
-                    </button>
+                    <div>
+                      <button
+                        onClick={() => editTask(index)}
+                        className="edit-task"
+                      >
+                        <img
+                          className="task-edit-button"
+                          src={editSVG}
+                          alt="edit"
+                        />
+                      </button>
+                      <button
+                        onClick={() => deleteTask(index)}
+                        className="delete-task"
+                      >
+                        <img
+                          className="task-delete-button"
+                          src={deleteSVG}
+                          alt="delete"
+                        />
+                      </button>
+                    </div>
                   </motion.li>
                 );
               })}
