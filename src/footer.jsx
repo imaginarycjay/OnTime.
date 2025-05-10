@@ -7,11 +7,6 @@ function Footer() {
         <a href="">Terms</a>
         <a href="">Contacts</a>
       </div>
-
-      {/* <div className="footer-devs">
-        <p>Made with &#10084; by SuperDev</p>
-        <p>OnTime. Allright Reserved</p>
-      </div> */}
     </footer>
   );
 }
