@@ -1,7 +1,15 @@
 import { motion } from "framer-motion";
-import Info from "./info";
-import 
+import Info from "./info.jsx"
+import InfoIMG from "./assets/info-2.svg";
+import { useState } from "react";
 function Navigation() {
+
+  const [infoVisibility, setInfoVisibility] = useState(false);
+
+  const openInfo = () => {
+    setInfoVisibility(prev => !prev)
+  }
+
   return (
     <div>
       <motion.nav
@@ -10,8 +18,10 @@ function Navigation() {
         className="main-nav"
       >
         <h1>OnTime.</h1>
+        <img src="" alt="" />
+        <button onClick={openInfo} className="info-button"><img className="info-img" src={InfoIMG}/></button>
       </motion.nav>
-      <Info />
+      {infoVisibility && <Info openInfo={openInfo}/>}
     </div>
   );
 }
