@@ -155,8 +155,8 @@ button:hover {
   color: white;
   background-color: var(--secondary-bg-color);
   opacity: 50%;
-  width: 270px;
-  height: 40px;
+  width: 16.875rem;
+  height: 2.5rem;
   font-family: Gabarito;
   font-size: 1.1rem;
   cursor: pointer;
@@ -406,6 +406,54 @@ button:hover {
 .modal-cancel-butt:hover {
   background-color: red;
   color: white;
+}
+
+.info-overlay {
+  position: fixed;
+  top: 0;
+  bottom: 0;
+  right: 0;
+  left: 0;
+  background-color: rgba(0, 0, 0, 0.3);
+  display: flex;
+  justify-content: flex-end;
+  align-items: flex-start;
+  backdrop-filter: blur(3px);
+}
+
+.info-container {
+  background-color: var(--secondary-bg-color);
+  width: 35%;
+  height: 40%;
+  margin-top: 3%;
+  margin-right: 3%;
+  border-radius: 10px;
+  display: flex;
+  flex-direction: column;
+  border: solid white 2px;
+  border-style: dashed ;
+}
+
+.info-title {
+  font-size: x-large;
+  text-align: center;
+}
+
+.info-container > a {
+  margin-left: 12%;
+  margin-bottom: 0.5rem;
+  text-decoration: none;
+  color: white;
+  font-size: large;
+}
+
+.info-container > a > span {
+  text-decoration: underline;
+}
+
+.copyright {
+  margin-top: 5rem;
+  text-align: center;
 }
 
 @media (max-width: 425px) {

@@ -9,7 +9,6 @@ function MainContent() {
   const [timeRunning, setTimeRunning] = useState(false); // Controls if timer is running
   const [activeBtn, setActiveBtn] = useState("pomodoro"); // Tracks which timer mode is active
   const [focusType, setFocusType] = useState("Time to Focus!"); // Display text for current mode
-
   // Modal and task states
   const [modalOpen, setModalOpen] = useState(false); // Controls modal visibility
   const [editingData, setEditingData] = useState(null); // Stores data of task being edited
