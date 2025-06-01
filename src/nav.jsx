@@ -18,7 +18,6 @@ function Navigation() {
         className="main-nav"
       >
         <h1>OnTime.</h1>
-        <img src="" alt="" />
         <button onClick={openInfo} className="info-button"><img className="info-img" src={InfoIMG}/></button>
       </motion.nav>
       {infoVisibility && <Info openInfo={openInfo}/>}

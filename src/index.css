@@ -455,7 +455,7 @@ button:hover {
 }
 
 .copyright {
-  margin-top: 3rem;
+  margin-top: 1rem;
   text-align: center;
 }
 
@@ -498,8 +498,8 @@ button:hover {
     max-width: 90%;
     margin-top: 1rem;
     gap: 8px;
-    align-items: center;
   }
+    align-items: center;
 
   .task-card {
     width: 320px;
