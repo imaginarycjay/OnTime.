@@ -4,17 +4,16 @@ import deleteSVG from "./assets/delete.svg";
 import editSVG from "./assets/edit-icon.svg";
 
 export default function Task({ taskList, list, setList, setEditingData }) {
-  // delete function for task
+  // func para ma delete task
   function deleteTask(index) {
     const returnedTask = list.filter((_, i) => i !== index);
     setList(returnedTask);
   }
-
+  // func to edit taksk
   function editTask(index) {
     setEditingData({ index, text: list[index] });
   }
-
-  // Save to localStorage when list changes
+  // set to local storage
   useEffect(() => {
     localStorage.setItem("myTODOs", JSON.stringify(list));
   }, [list]);

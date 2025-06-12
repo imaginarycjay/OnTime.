@@ -1,6 +1,6 @@
 import { motion } from "framer-motion";
 import Info from "./info.jsx"
-import InfoIMG from "./assets/info-2.svg";
+import InfoOutlineIcon from '@mui/icons-material/InfoOutline';
 import { useState } from "react";
 function Navigation() {
 
@@ -18,7 +18,7 @@ function Navigation() {
         className="main-nav"
       >
         <h1>OnTime.</h1>
-        <button onClick={openInfo} className="info-button"><img className="info-img" src={InfoIMG}/></button>
+        <button onClick={openInfo} className="info-button"><InfoOutlineIcon sx={{fontSize: 32, color: "white" }}/></button>
       </motion.nav>
       {infoVisibility && <Info openInfo={openInfo}/>}
     </div>

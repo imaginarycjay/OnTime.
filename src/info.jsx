@@ -1,10 +1,10 @@
-import close from './assets/close.svg'
+import CloseRoundedIcon from '@mui/icons-material/CloseRounded';
 
 export default function Info({openInfo}) {
   return (
     <div className="info-overlay">
       <div className="info-container">
-        <button onClick={openInfo} className="close-info-button"><img className='close-info' src={close} alt="close" /></button>
+        <button onClick={openInfo} className="close-info-button"><CloseRoundedIcon sx={{color: "white", fontSize: 35}}/></button>
         <p className="info-title">OnTime: Task Management Pomodoro</p>
 
         <a href="https://www.facebook.com/imaginarycjay">

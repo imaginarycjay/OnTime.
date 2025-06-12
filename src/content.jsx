@@ -11,11 +11,10 @@ function MainContent() {
   const [activeBtn, setActiveBtn] = useState("pomodoro");
   const [focusType, setFocusType] = useState("Time to Focus!");
   
-  //get item 
   const [list, setList] = useState(() => {
     const stored = localStorage.getItem("myTODOs");
     return stored ? JSON.parse(stored) : [];
-  });
+  })
 
   const alarmSound = new Audio(
     "https://assets.mixkit.co/active_storage/sfx/2869/2869-preview.mp3"
