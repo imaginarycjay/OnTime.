@@ -1,9 +1,11 @@
 import { motion, AnimatePresence } from "framer-motion";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import deleteSVG from "./assets/delete.svg";
 import editSVG from "./assets/edit-icon.svg";
+import MoreVertIcon from "@mui/icons-material/MoreVert";
 
 export default function Task({ taskList, list, setList, setEditingData }) {
+  const [showOptions, setShowOptions] = useState(false);
   // func para ma delete task
   function deleteTask(index) {
     const returnedTask = list.filter((_, i) => i !== index);
@@ -17,6 +19,10 @@ export default function Task({ taskList, list, setList, setEditingData }) {
   useEffect(() => {
     localStorage.setItem("myTODOs", JSON.stringify(list));
   }, [list]);
+
+  const handleOptionsClick = () => {
+    setShowOptions((prev) => !prev);
+  };
 
   return (
     <motion.div
@@ -33,51 +39,60 @@ export default function Task({ taskList, list, setList, setEditingData }) {
       className="task-parent-parent"
     >
       <div className="task-parent">
-        <p>Task List:</p>
+        <div className="task-banner-container">
+          <p className="tasklist">Task List:</p>
+          <button className="vert-task-icon" onClick={handleOptionsClick}>
+            <MoreVertIcon sx={{ fontSize: 21, color: "white" }} />
+          </button>
+        </div>
         <div className="task-card">
-          {taskList === 0 && (
-            <h2 className="no-task-msg">Add task to see the list...</h2>
-          )}
-          <ul>
-            <AnimatePresence>
-              {list.map((items, index) => {
-                return (
-                  <motion.li
-                    initial={{ opacity: 0, y: 30 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    exit={{ opacity: 1, x: 300 }}
-                    transition={{ duration: 0.2 }}
-                    className="task-items"
-                    key={index}
-                  >
-                    • {items}
-                    <div>
-                      <button
-                        onClick={() => editTask(index)}
-                        className="edit-task"
-                      >
-                        <img
-                          className="task-edit-button"
-                          src={editSVG}
-                          alt="edit"
-                        />
-                      </button>
-                      <button
-                        onClick={() => deleteTask(index)}
-                        className="delete-task"
-                      >
-                        <img
-                          className="task-delete-button"
-                          src={deleteSVG}
-                          alt="delete"
-                        />
-                      </button>
-                    </div>
-                  </motion.li>
-                );
-              })}
-            </AnimatePresence>
-          </ul>
+          <div className="task-card-wrapper">
+            {taskList === 0 && (
+              <h2 className="no-task-msg">Add task to see the list</h2>
+            )}
+            <ul style={{ paddingLeft: "0px" }}>
+              <AnimatePresence>
+                {list.map((items, index) => {
+                  return (
+                    <motion.li
+                      initial={{ opacity: 0, y: 30 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      exit={{ opacity: 1, x: 300 }}
+                      transition={{ duration: 0.2 }}
+                      className="task-items"
+                      key={index}
+                    >
+                      - {items}
+                      {showOptions && (
+                        <div>
+                          <button
+                            onClick={() => editTask(index)}
+                            className="edit-task"
+                          >
+                            <img
+                              className="task-edit-button"
+                              src={editSVG}
+                              alt="edit"
+                            />
+                          </button>
+                          <button
+                            onClick={() => deleteTask(index)}
+                            className="delete-task"
+                          >
+                            <img
+                              className="task-delete-button"
+                              src={deleteSVG}
+                              alt="delete"
+                            />
+                          </button>
+                        </div>
+                      )}
+                    </motion.li>
+                  );
+                })}
+              </AnimatePresence>
+            </ul>
+          </div>
         </div>
       </div>
     </motion.div>

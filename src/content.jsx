@@ -10,33 +10,43 @@ function MainContent() {
   const [editingData, setEditingData] = useState(null);
   const [activeBtn, setActiveBtn] = useState("pomodoro");
   const [focusType, setFocusType] = useState("Time to Focus!");
-  
+  const [pomoCount, setPomoCount] = useState(0);
   const [list, setList] = useState(() => {
     const stored = localStorage.getItem("myTODOs");
     return stored ? JSON.parse(stored) : [];
-  })
+  });
 
   const alarmSound = new Audio(
     "https://assets.mixkit.co/active_storage/sfx/2869/2869-preview.mp3"
   );
 
   useEffect(() => {
+    alarmSound.load();
+  }, []);
+
+  // to do: make a ticking ticking sound per second
+  const tickingSound = new Audio("");
+
+  useEffect(() => {
     let realTime;
 
-    if (currentTime && timeRunning > 0) {
+    if (currentTime > 0 && timeRunning) {
       realTime = setInterval(() => {
         setCurrentTime((prev) => prev - 1);
       }, 1000);
     }
 
-    if (currentTime === 0) {
+    // Only trigger when timer just finished and was running
+    if (currentTime === 0 && timeRunning) {
       setTimeRunning(false);
+      setPomoCount((prev) => prev + 1);
       alarmSound.play().catch((error) => {
         console.log("Error playing sound:", error);
       });
+
       setTimeout(() => {
-        alert("Your time is up!");
-      }, 100);
+        alert("Time's up! Take a break or start a new session.");
+      }, 300); // Reset the timer after 3 seconds
     }
 
     return () => {
@@ -159,6 +169,8 @@ function MainContent() {
                 Add Task +
               </button>
             </div>
+
+            <p className="pomodoro-count">{pomoCount}/4</p>
           </div>
         </div>
       </motion.div>
