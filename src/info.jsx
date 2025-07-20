@@ -9,16 +9,27 @@ export default function Info({ openInfo }) {
         </button>
         <p className="info-title">OnTime: Task Management Pomodoro</p>
 
-        <a href="https://www.facebook.com/imaginarycjay">
-          {" "}
-          Developed by: <span>Christian Perez</span>
-        </a>
-        <a href="https://github.com/imaginarycjay/OnTime..git">
-          {" "}
-          Github Source Code: <span>Click Here!</span>
-        </a>
+        <a style={{ fontWeight: "bold", fontSize: "1.3rem" }}>Contributors: </a>
 
-        <p className="copyright">OnTime 2025</p>
+        <a href="https://web.facebook.com/mar.yel.563552" target="_blank">
+          {" "}
+          <span>Mariel R. Alagano</span>
+        </a>
+        <a href="https://web.facebook.com/cmlc.corpuz.75" target="_blank">
+          {" "}
+          <span>Cesar Mark L. Corpuz</span>
+        </a>
+        <a href="https://web.facebook.com/rie.cahh" target="_blank">
+          {" "}
+          <span>Erica B. Pajete</span>
+        </a>
+        <a href="https://web.facebook.com/jane.atejada.14" target="_blank">
+          {" "}
+          <span>Jane A. Tejada</span>
+        </a>
+        <p style={{ fontSize: "8" }} className="copyright">
+          OnTime 2025 (Under Development)
+        </p>
       </div>
     </div>
   );

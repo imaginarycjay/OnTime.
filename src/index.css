@@ -103,7 +103,7 @@ button:hover {
   margin-left: auto;
   margin-right: auto;
   /* border: violet 2px solid; */
-  height: 19rem ;
+  height: 19rem;
   width: 420px;
   background-color: var(--secondary-bg-color);
   display: flex;
@@ -112,8 +112,11 @@ button:hover {
   align-items: center;
   border-radius: 8px;
   transition: background-color 0.4s ease;
-  box-shadow: rgba(0, 0, 0, 0.07) 0px 1px 1px, rgba(0, 0, 0, 0.07) 0px 2px 2px,
-    rgba(0, 0, 0, 0.07) 0px 4px 4px, rgba(0, 0, 0, 0.07) 0px 8px 8px,
+  box-shadow:
+    rgba(0, 0, 0, 0.07) 0px 1px 1px,
+    rgba(0, 0, 0, 0.07) 0px 2px 2px,
+    rgba(0, 0, 0, 0.07) 0px 4px 4px,
+    rgba(0, 0, 0, 0.07) 0px 8px 8px,
     rgba(0, 0, 0, 0.07) 0px 16px 16px;
 }
 
@@ -211,8 +214,11 @@ button:hover {
   background-color: var(--secondary-bg-color);
   border-radius: 7px;
   transition: background-color 0.4s ease;
-  box-shadow: rgba(0, 0, 0, 0.07) 0px 1px 1px, rgba(0, 0, 0, 0.07) 0px 2px 2px,
-    rgba(0, 0, 0, 0.07) 0px 4px 4px, rgba(0, 0, 0, 0.07) 0px 8px 8px,
+  box-shadow:
+    rgba(0, 0, 0, 0.07) 0px 1px 1px,
+    rgba(0, 0, 0, 0.07) 0px 2px 2px,
+    rgba(0, 0, 0, 0.07) 0px 4px 4px,
+    rgba(0, 0, 0, 0.07) 0px 8px 8px,
     rgba(0, 0, 0, 0.07) 0px 16px 16px;
   display: flex;
   justify-content: center;
@@ -344,7 +350,8 @@ button:hover {
   padding-left: 1rem;
   font-family: Poppins;
   font-size: larger;
-  box-shadow: rgba(50, 50, 93, 0.25) 0px 6px 12px -2px,
+  box-shadow:
+    rgba(50, 50, 93, 0.25) 0px 6px 12px -2px,
     rgba(0, 0, 0, 0.3) 0px 3px 7px -3px;
   border-radius: 6px;
 }
@@ -378,7 +385,8 @@ button:hover {
   font-family: Poppins;
   border: rgba(0, 0, 0, 0.2);
   cursor: pointer;
-  box-shadow: rgba(50, 50, 93, 0.25) 0px 6px 12px -2px,
+  box-shadow:
+    rgba(50, 50, 93, 0.25) 0px 6px 12px -2px,
     rgba(0, 0, 0, 0.3) 0px 3px 7px -3px;
 }
 .modal-cancel-butt {
@@ -390,7 +398,8 @@ button:hover {
   font-family: Poppins;
   cursor: pointer;
   transition: all 0.2s;
-  box-shadow: rgba(50, 50, 93, 0.25) 0px 6px 12px -2px,
+  box-shadow:
+    rgba(50, 50, 93, 0.25) 0px 6px 12px -2px,
     rgba(0, 0, 0, 0.3) 0px 3px 7px -3px;
 }
 
@@ -504,7 +513,7 @@ button:hover {
   height: 85%;
   overflow: hidden;
   overflow-y: scroll;
-  padding-left: 0.2rem ;
+  padding-left: 0.2rem;
 }
 
 .task-card-wrapper::-webkit-scrollbar {
@@ -582,5 +591,8 @@ button:hover {
 
   .info-container {
     width: 90%;
+  }
+  .task-items {
+    margin-left: 8px;
   }
 }

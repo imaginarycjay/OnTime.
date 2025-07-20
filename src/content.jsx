@@ -17,7 +17,7 @@ function MainContent() {
   });
 
   const alarmSound = new Audio(
-    "https://assets.mixkit.co/active_storage/sfx/2869/2869-preview.mp3"
+    "https://assets.mixkit.co/active_storage/sfx/2869/2869-preview.mp3",
   );
 
   useEffect(() => {
@@ -25,7 +25,7 @@ function MainContent() {
   }, []);
 
   // to do: make a ticking ticking sound per second
-  const tickingSound = new Audio("");
+  // const tickingSound = new Audio("");
 
   useEffect(() => {
     let realTime;
@@ -107,7 +107,7 @@ function MainContent() {
                 setTimeRunning(false),
                 "Time to Focus",
                 "#be3d2a",
-                "#d57d70"
+                "#d57d70",
               )
             }
             style={{
@@ -126,7 +126,7 @@ function MainContent() {
                 setTimeRunning(false),
                 "Time for Break",
                 "#169c3e",
-                "#4cb16a"
+                "#4cb16a",
               )
             }
             style={{
@@ -145,7 +145,7 @@ function MainContent() {
                 setTimeRunning(false),
                 "Time for Long Break",
                 "#d97217",
-                "#e3934d"
+                "#e3934d",
               );
             }}
             style={{
