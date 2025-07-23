@@ -19,7 +19,7 @@ function MainContent() {
   const [showTaskDoneModal, setShowTaskDoneModal] = useState(false);
 
   const alarmSound = new Audio(
-    "https://assets.mixkit.co/active_storage/sfx/2869/2869-preview.mp3",
+    "https://assets.mixkit.co/active_storage/sfx/2869/2869-preview.mp3"
   );
 
   useEffect(() => {
@@ -44,33 +44,62 @@ function MainContent() {
         console.log("Error playing sound:", error);
       });
 
-      if (selectedTask && activeBtn === 'pomodoro') {
+      if (selectedTask && activeBtn === "pomodoro") {
         setList((prevList) => {
           const idx = prevList.findIndex(
-            (t) => t.name === selectedTask.name && t.pomoTotal === selectedTask.pomoTotal
+            (t) =>
+              t.name === selectedTask.name &&
+              t.pomoTotal === selectedTask.pomoTotal
           );
           if (idx === -1) return prevList;
-          const updatedTask = { ...prevList[idx], pomoDone: prevList[idx].pomoDone + 1 };
+          const updatedTask = {
+            ...prevList[idx],
+            pomoDone: prevList[idx].pomoDone + 1,
+          };
           const newList = [...prevList];
           newList[idx] = updatedTask;
           setSelectedTask(updatedTask);
           // Update stats in localStorage
-          const stats = JSON.parse(localStorage.getItem('ontime_stats')) || { totalPomo: 0, hours: 0 };
+          const stats = JSON.parse(localStorage.getItem("ontime_stats")) || {
+            totalPomo: 0,
+            hours: 0,
+          };
           stats.totalPomo += 1;
           stats.hours += 25 / 60;
-          localStorage.setItem('ontime_stats', JSON.stringify(stats));
+          localStorage.setItem("ontime_stats", JSON.stringify(stats));
           // If task is done, show modal and do not auto-break
           if (updatedTask.pomoDone >= updatedTask.pomoTotal) {
             setShowTaskDoneModal(true);
           } else if (updatedTask.pomoDone % 4 === 0) {
-            handleClick('long', 10 * 60, false, 'Time for Long Break', '#d97217', '#e3934d');
+            handleClick(
+              "long",
+              10 * 60,
+              false,
+              "Time for Long Break",
+              "#d97217",
+              "#e3934d"
+            );
           } else {
-            handleClick('short', 5 * 60, false, 'Time for Break', '#169c3e', '#4cb16a');
+            handleClick(
+              "short",
+              5 * 60,
+              false,
+              "Time for Break",
+              "#169c3e",
+              "#4cb16a"
+            );
           }
           return newList;
         });
-      } else if (activeBtn === 'pomodoro') {
-        handleClick('short', 5 * 60, false, 'Time for Break', '#169c3e', '#4cb16a');
+      } else if (activeBtn === "pomodoro") {
+        handleClick(
+          "short",
+          5 * 60,
+          false,
+          "Time for Break",
+          "#169c3e",
+          "#4cb16a"
+        );
       }
     }
 
@@ -86,12 +115,12 @@ function MainContent() {
   }
 
   function startTime() {
-    if (activeBtn === 'pomodoro' && !selectedTask) {
+    if (activeBtn === "pomodoro" && !selectedTask) {
       setShowSelectTaskModal(true);
       return;
     }
     if (
-      activeBtn === 'pomodoro' &&
+      activeBtn === "pomodoro" &&
       selectedTask &&
       selectedTask.pomoDone >= selectedTask.pomoTotal
     ) {
@@ -140,11 +169,11 @@ function MainContent() {
             onClick={() =>
               handleClick(
                 "pomodoro",
-                 25 * 60,
+                25 * 60,
                 setTimeRunning(false),
                 "Time to Focus",
                 "#be3d2a",
-                "#d57d70",
+                "#d57d70"
               )
             }
             style={{
@@ -163,7 +192,7 @@ function MainContent() {
                 setTimeRunning(false),
                 "Time for Break",
                 "#169c3e",
-                "#4cb16a",
+                "#4cb16a"
               )
             }
             style={{
@@ -182,7 +211,7 @@ function MainContent() {
                 setTimeRunning(false),
                 "Time for Long Break",
                 "#d97217",
-                "#e3934d",
+                "#e3934d"
               );
             }}
             style={{
@@ -209,7 +238,10 @@ function MainContent() {
 
             {selectedTask && (
               <div className="selected-task-display">
-                <span>Focusing: {selectedTask.name} ({selectedTask.pomoDone}/{selectedTask.pomoTotal})</span>
+                <span>
+                  Focusing: {selectedTask.name} ({selectedTask.pomoDone}/
+                  {selectedTask.pomoTotal})
+                </span>
               </div>
             )}
           </div>
@@ -241,9 +273,16 @@ function MainContent() {
       {showSelectTaskModal && (
         <div className="modal-overlay">
           <div className="modal-container">
-            <div style={{ padding: 24, textAlign: 'center' }}>
-              <p style={{ fontSize: '1.2rem' }}>You must select a task first.</p>
-              <button className="modal-add-butt" onClick={() => setShowSelectTaskModal(false)}>OK</button>
+            <div style={{ padding: 24, textAlign: "center" }}>
+              <p style={{ fontSize: "1.2rem" }}>
+                You must select a task first.
+              </p>
+              <button
+                className="modal-add-butt"
+                onClick={() => setShowSelectTaskModal(false)}
+              >
+                OK
+              </button>
             </div>
           </div>
         </div>
@@ -251,9 +290,16 @@ function MainContent() {
       {showTaskDoneModal && (
         <div className="modal-overlay">
           <div className="modal-container">
-            <div style={{ padding: 24, textAlign: 'center' }}>
-              <p style={{ fontSize: '1.2rem' }}>Task is done! Pick a new task.</p>
-              <button className="modal-add-butt" onClick={() => setShowTaskDoneModal(false)}>OK</button>
+            <div style={{ padding: 24, textAlign: "center" }}>
+              <p style={{ fontSize: "1.2rem" }}>
+                Task is done! Pick a new task.
+              </p>
+              <button
+                className="modal-add-butt"
+                onClick={() => setShowTaskDoneModal(false)}
+              >
+                OK
+              </button>
             </div>
           </div>
         </div>

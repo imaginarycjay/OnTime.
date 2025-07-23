@@ -1,10 +1,11 @@
 import { motion, AnimatePresence } from "framer-motion";
 import { useEffect, useState } from "react";
-import deleteSVG from "./assets/delete.svg";
-import editSVG from "./assets/edit-icon.svg";
 import MoreVertIcon from "@mui/icons-material/MoreVert";
 import PlayArrowIcon from "@mui/icons-material/PlayArrow";
-import PauseIcon from '@mui/icons-material/Pause';
+import PauseIcon from "@mui/icons-material/Pause";
+
+import EditIcon from "@mui/icons-material/Edit";
+import DeleteIcon from "@mui/icons-material/Delete";
 
 export default function Task({
   taskList,
@@ -74,14 +75,18 @@ export default function Task({
                       className="task-items"
                       key={index}
                     >
-                      {task.name} ({task.pomoDone}/{task.pomoTotal})
+                      - {task.name} ({task.pomoDone}/{task.pomoTotal})
                       {showOptions && (
                         <div>
                           {showOptions && (
                             <button
                               className="select-task-btn"
                               onClick={() => {
-                                if (selectedTask && selectedTask.name === task.name && timeRunning) {
+                                if (
+                                  selectedTask &&
+                                  selectedTask.name === task.name &&
+                                  timeRunning
+                                ) {
                                   setTimeRunning(false);
                                 } else {
                                   setSelectedTask(task);
@@ -89,10 +94,16 @@ export default function Task({
                                 }
                               }}
                             >
-                              {(selectedTask && selectedTask.name === task.name && timeRunning) ? (
-                                <PauseIcon sx={{ fontSize: 18 }} />
+                              {selectedTask &&
+                              selectedTask.name === task.name &&
+                              timeRunning ? (
+                                <PauseIcon
+                                  sx={{
+                                    fontSize: 20,
+                                  }}
+                                />
                               ) : (
-                                <PlayArrowIcon sx={{ fontSize: 18 }} />
+                                <PlayArrowIcon sx={{ fontSize: 20 }} />
                               )}
                             </button>
                           )}
@@ -100,21 +111,13 @@ export default function Task({
                             onClick={() => editTask(index)}
                             className="edit-task"
                           >
-                            <img
-                              className="task-edit-button"
-                              src={editSVG}
-                              alt="edit"
-                            />
+                            <EditIcon sx={{ fontSize: 18 }} />
                           </button>
                           <button
                             onClick={() => deleteTask(index)}
                             className="delete-task"
                           >
-                            <img
-                              className="task-delete-button"
-                              src={deleteSVG}
-                              alt="delete"
-                            />
+                            <DeleteIcon sx={{ fontSize: 18 }} />
                           </button>
                         </div>
                       )}
