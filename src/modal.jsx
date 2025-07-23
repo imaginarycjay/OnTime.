@@ -2,16 +2,21 @@ import { motion } from "framer-motion";
 import { useState, useEffect } from "react";
 
 export default function Modal({ grabData, openModal, initialValue = "", isEditing = false }) {
-  const [inputValue, setInputValue] = useState(initialValue);
+  const [inputValue, setInputValue] = useState(initialValue.name || initialValue || "");
+  const [pomoTotal, setPomoTotal] = useState(initialValue.pomoTotal || 1);
 
-  // Update input value when initialValue changes
   useEffect(() => {
-    setInputValue(initialValue);
+    setInputValue(initialValue.name || initialValue || "");
+    setPomoTotal(initialValue.pomoTotal || 1);
   }, [initialValue]);
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    grabData({ result: inputValue, isEditing });
+    if (isEditing) {
+      grabData({ result: { ...initialValue, name: inputValue, pomoTotal }, isEditing });
+    } else {
+      grabData({ result: { name: inputValue, pomoTotal, pomoDone: 0 }, isEditing });
+    }
     openModal();
   };
 
@@ -31,6 +36,11 @@ export default function Modal({ grabData, openModal, initialValue = "", isEditin
             required
             placeholder="Add task here..."
           />
+          <div style={{ display: 'flex', alignItems: 'center', marginTop: 8 }}>
+            <button className="pomoAdder" type="button" onClick={() => setPomoTotal(Math.max(1, pomoTotal - 1))}>-</button>
+            <span style={{ margin: '0 8px' }}>{pomoTotal} Pomodoros</span>
+            <button className="pomoAdder" type="button" onClick={() => setPomoTotal(pomoTotal + 1)}>+</button>
+          </div>
         </form>
         <div className="modal-buttons-container">
           <div className="modal-buttons">

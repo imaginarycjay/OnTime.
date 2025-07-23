@@ -112,11 +112,8 @@ button:hover {
   align-items: center;
   border-radius: 8px;
   transition: background-color 0.4s ease;
-  box-shadow:
-    rgba(0, 0, 0, 0.07) 0px 1px 1px,
-    rgba(0, 0, 0, 0.07) 0px 2px 2px,
-    rgba(0, 0, 0, 0.07) 0px 4px 4px,
-    rgba(0, 0, 0, 0.07) 0px 8px 8px,
+  box-shadow: rgba(0, 0, 0, 0.07) 0px 1px 1px, rgba(0, 0, 0, 0.07) 0px 2px 2px,
+    rgba(0, 0, 0, 0.07) 0px 4px 4px, rgba(0, 0, 0, 0.07) 0px 8px 8px,
     rgba(0, 0, 0, 0.07) 0px 16px 16px;
 }
 
@@ -214,11 +211,8 @@ button:hover {
   background-color: var(--secondary-bg-color);
   border-radius: 7px;
   transition: background-color 0.4s ease;
-  box-shadow:
-    rgba(0, 0, 0, 0.07) 0px 1px 1px,
-    rgba(0, 0, 0, 0.07) 0px 2px 2px,
-    rgba(0, 0, 0, 0.07) 0px 4px 4px,
-    rgba(0, 0, 0, 0.07) 0px 8px 8px,
+  box-shadow: rgba(0, 0, 0, 0.07) 0px 1px 1px, rgba(0, 0, 0, 0.07) 0px 2px 2px,
+    rgba(0, 0, 0, 0.07) 0px 4px 4px, rgba(0, 0, 0, 0.07) 0px 8px 8px,
     rgba(0, 0, 0, 0.07) 0px 16px 16px;
   display: flex;
   justify-content: center;
@@ -333,25 +327,31 @@ button:hover {
   justify-content: space-between;
 }
 
+.pomoAdder {
+  border: none;
+  border-radius: 30%;
+  cursor: pointer;
+}
+
 .modal-container > form {
   width: auto;
-  height: 30%;
+  height: 37%;
   margin-top: 2rem;
   /* border: 1px red solid; */
   display: flex;
   justify-content: center;
   align-items: center;
+  flex-direction: column;
 }
 
 .modal-container > form > input {
   width: 85%;
-  height: 80%;
+  height: 100%;
   border: var(--secondary-bg-color) 1px solid;
   padding-left: 1rem;
   font-family: Poppins;
   font-size: larger;
-  box-shadow:
-    rgba(50, 50, 93, 0.25) 0px 6px 12px -2px,
+  box-shadow: rgba(50, 50, 93, 0.25) 0px 6px 12px -2px,
     rgba(0, 0, 0, 0.3) 0px 3px 7px -3px;
   border-radius: 6px;
 }
@@ -385,8 +385,7 @@ button:hover {
   font-family: Poppins;
   border: rgba(0, 0, 0, 0.2);
   cursor: pointer;
-  box-shadow:
-    rgba(50, 50, 93, 0.25) 0px 6px 12px -2px,
+  box-shadow: rgba(50, 50, 93, 0.25) 0px 6px 12px -2px,
     rgba(0, 0, 0, 0.3) 0px 3px 7px -3px;
 }
 .modal-cancel-butt {
@@ -398,8 +397,7 @@ button:hover {
   font-family: Poppins;
   cursor: pointer;
   transition: all 0.2s;
-  box-shadow:
-    rgba(50, 50, 93, 0.25) 0px 6px 12px -2px,
+  box-shadow: rgba(50, 50, 93, 0.25) 0px 6px 12px -2px,
     rgba(0, 0, 0, 0.3) 0px 3px 7px -3px;
 }
 
@@ -529,13 +527,23 @@ button:hover {
   border-bottom-right-radius: 4rem;
 }
 
-.pomodoro-count {
+.selected-task-display {
   font-family: Gabarito;
   font-size: 1rem;
   color: var(--main-text-color);
   margin-right: 1rem;
   margin-top: 0.7rem;
   opacity: 0.8;
+}
+
+.select-task-btn {
+  background-color: var(--secondary-bg-color);
+  object-fit: contain;
+  cursor: pointer;
+  border: none;
+  transition: background-color 0.4s ease;
+  padding: 0;
+  margin-right: 0.3rem;
 }
 
 @media (max-width: 768px) {
@@ -554,6 +562,14 @@ button:hover {
     height: 100%;
     overflow-y: scroll;
   }
+}
+
+.stat-button {
+  width: 3rem;
+  background-color: var(--primary-bg-color);
+  border: none;
+  transition: background-color 0.4s ease;
+  cursor: pointer;
 }
 
 @media (max-width: 425px) {

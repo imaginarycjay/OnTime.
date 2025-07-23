@@ -3,8 +3,19 @@ import { useEffect, useState } from "react";
 import deleteSVG from "./assets/delete.svg";
 import editSVG from "./assets/edit-icon.svg";
 import MoreVertIcon from "@mui/icons-material/MoreVert";
+import PlayArrowIcon from "@mui/icons-material/PlayArrow";
+import PauseIcon from '@mui/icons-material/Pause';
 
-export default function Task({ taskList, list, setList, setEditingData }) {
+export default function Task({
+  taskList,
+  list,
+  setList,
+  setEditingData,
+  selectedTask,
+  setSelectedTask,
+  timeRunning,
+  setTimeRunning,
+}) {
   const [showOptions, setShowOptions] = useState(false);
   // func para ma delete task
   function deleteTask(index) {
@@ -51,8 +62,9 @@ export default function Task({ taskList, list, setList, setEditingData }) {
               <h2 className="no-task-msg">Add task to see the list</h2>
             )}
             <ul style={{ paddingLeft: "0px" }}>
+              {" "}
               <AnimatePresence>
-                {list.map((items, index) => {
+                {list.map((task, index) => {
                   return (
                     <motion.li
                       initial={{ opacity: 0, y: 30 }}
@@ -62,9 +74,28 @@ export default function Task({ taskList, list, setList, setEditingData }) {
                       className="task-items"
                       key={index}
                     >
-                      - {items}
+                      {task.name} ({task.pomoDone}/{task.pomoTotal})
                       {showOptions && (
                         <div>
+                          {showOptions && (
+                            <button
+                              className="select-task-btn"
+                              onClick={() => {
+                                if (selectedTask && selectedTask.name === task.name && timeRunning) {
+                                  setTimeRunning(false);
+                                } else {
+                                  setSelectedTask(task);
+                                  setTimeRunning(true);
+                                }
+                              }}
+                            >
+                              {(selectedTask && selectedTask.name === task.name && timeRunning) ? (
+                                <PauseIcon sx={{ fontSize: 18 }} />
+                              ) : (
+                                <PlayArrowIcon sx={{ fontSize: 18 }} />
+                              )}
+                            </button>
+                          )}
                           <button
                             onClick={() => editTask(index)}
                             className="edit-task"
