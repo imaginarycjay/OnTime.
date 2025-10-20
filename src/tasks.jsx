@@ -6,6 +6,7 @@ import PauseIcon from "@mui/icons-material/Pause";
 
 import EditIcon from "@mui/icons-material/Edit";
 import DeleteIcon from "@mui/icons-material/Delete";
+import ConfirmModal from "./confirmModal.jsx";
 
 export default function Task({
   taskList,
@@ -16,10 +17,27 @@ export default function Task({
   setSelectedTask,
   timeRunning,
   setTimeRunning,
+  resetToPomodoro,
 }) {
   const [showOptions, setShowOptions] = useState(false);
+  const [showSwitchConfirm, setShowSwitchConfirm] = useState(false);
+  const [pendingTask, setPendingTask] = useState(null);
+  const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
+  const [pendingDeleteIndex, setPendingDeleteIndex] = useState(null);
+
   // func para ma delete task
   function deleteTask(index) {
+    const taskToDelete = list[index];
+    const isRunningTask =
+      selectedTask && selectedTask.name === taskToDelete.name;
+
+    // If deleting the currently running task, reset timer and clear selection
+    if (isRunningTask) {
+      setTimeRunning(false);
+      setSelectedTask(null);
+      resetToPomodoro(); // Reset timer to pomodoro state
+    }
+
     const returnedTask = list.filter((_, i) => i !== index);
     setList(returnedTask);
   }
@@ -34,6 +52,69 @@ export default function Task({
 
   const handleOptionsClick = () => {
     setShowOptions((prev) => !prev);
+  };
+
+  const handleTaskSelect = (task) => {
+    // If clicking on the same task, just pause/unpause
+    if (selectedTask && selectedTask.name === task.name) {
+      setTimeRunning(!timeRunning);
+    } else if (timeRunning && selectedTask) {
+      // If timer is running on a different task, show confirmation
+      setPendingTask(task);
+      setShowSwitchConfirm(true);
+    } else {
+      // If timer is not running, just switch
+      setSelectedTask(task);
+      setTimeRunning(true);
+    }
+  };
+
+  const confirmSwitchTask = () => {
+    setShowSwitchConfirm(false);
+    setSelectedTask(pendingTask);
+    // Reset timer to 25:00 and stop it when switching tasks
+    resetToPomodoro();
+    setPendingTask(null);
+  };
+
+  const cancelSwitchTask = () => {
+    setShowSwitchConfirm(false);
+    setPendingTask(null);
+  };
+
+  const handleDeleteClick = (index) => {
+    setPendingDeleteIndex(index);
+    setShowDeleteConfirm(true);
+  };
+
+  const confirmDelete = () => {
+    if (pendingDeleteIndex !== null) {
+      deleteTask(pendingDeleteIndex);
+      setPendingDeleteIndex(null);
+    }
+    setShowDeleteConfirm(false);
+  };
+
+  const cancelDelete = () => {
+    setPendingDeleteIndex(null);
+    setShowDeleteConfirm(false);
+  };
+
+  const getDeleteMessage = () => {
+    if (pendingDeleteIndex === null) return "";
+
+    const taskToDelete = list[pendingDeleteIndex];
+    const isRunningTask =
+      selectedTask &&
+      selectedTask.name === taskToDelete.name &&
+      timeRunning;
+
+    if (isRunningTask) {
+      return (
+        "This task is currently running! Deleting it will reset the timer and you'll need to select another task. Are you sure?"
+      );
+    }
+    return "Are you sure you want to delete this task?";
   };
 
   return (
@@ -76,51 +157,40 @@ export default function Task({
                       key={index}
                     >
                       - {task.name} ({task.pomoDone}/{task.pomoTotal})
-                      {showOptions && (
-                        <div>
-                          {showOptions && (
-                            <button
-                              className="select-task-btn"
-                              onClick={() => {
-                                if (
-                                  selectedTask &&
-                                  selectedTask.name === task.name &&
-                                  timeRunning
-                                ) {
-                                  setTimeRunning(false);
-                                } else {
-                                  setSelectedTask(task);
-                                  setTimeRunning(true);
-                                }
+                      <div>
+                        <button
+                          className="select-task-btn"
+                          onClick={() => handleTaskSelect(task)}
+                        >
+                          {selectedTask &&
+                          selectedTask.name === task.name &&
+                          timeRunning ? (
+                            <PauseIcon
+                              sx={{
+                                fontSize: 20,
                               }}
-                            >
-                              {selectedTask &&
-                              selectedTask.name === task.name &&
-                              timeRunning ? (
-                                <PauseIcon
-                                  sx={{
-                                    fontSize: 20,
-                                  }}
-                                />
-                              ) : (
-                                <PlayArrowIcon sx={{ fontSize: 20 }} />
-                              )}
-                            </button>
+                            />
+                          ) : (
+                            <PlayArrowIcon sx={{ fontSize: 20 }} />
                           )}
-                          <button
-                            onClick={() => editTask(index)}
-                            className="edit-task"
-                          >
-                            <EditIcon sx={{ fontSize: 18 }} />
-                          </button>
-                          <button
-                            onClick={() => deleteTask(index)}
-                            className="delete-task"
-                          >
-                            <DeleteIcon sx={{ fontSize: 18 }} />
-                          </button>
-                        </div>
-                      )}
+                        </button>
+                        {showOptions && (
+                          <>
+                            <button
+                              onClick={() => editTask(index)}
+                              className="edit-task"
+                            >
+                              <EditIcon sx={{ fontSize: 18 }} />
+                            </button>
+                            <button
+                              onClick={() => handleDeleteClick(index)}
+                              className="delete-task"
+                            >
+                              <DeleteIcon sx={{ fontSize: 18 }} />
+                            </button>
+                          </>
+                        )}
+                      </div>
                     </motion.li>
                   );
                 })}
@@ -129,6 +199,20 @@ export default function Task({
           </div>
         </div>
       </div>
+      {showSwitchConfirm && (
+        <ConfirmModal
+          message="Switching tasks will lose your current progress. Do you want to continue?"
+          onConfirm={confirmSwitchTask}
+          onCancel={cancelSwitchTask}
+        />
+      )}
+      {showDeleteConfirm && (
+        <ConfirmModal
+          message={getDeleteMessage()}
+          onConfirm={confirmDelete}
+          onCancel={cancelDelete}
+        />
+      )}
     </motion.div>
   );
 }
