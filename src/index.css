@@ -557,6 +557,90 @@ button:hover {
   color: white;
 }
 
+.stat-button {
+  width: 3rem;
+  background-color: var(--primary-bg-color);
+  border: none;
+  transition: background-color 0.4s ease;
+  cursor: pointer;
+}
+
+/* Confirmation Modal Styles */
+.confirmation-modal-container {
+  background-color: var(--secondary-bg-color);
+  width: 90%;
+  max-width: 500px;
+  border-radius: 10px;
+  padding: 2rem;
+  box-shadow:
+    rgba(0, 0, 0, 0.1) 0px 10px 15px -3px,
+    rgba(0, 0, 0, 0.05) 0px 4px 6px -2px;
+}
+
+.confirmation-modal-content {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.confirmation-message {
+  font-family: Gabarito;
+  font-size: 1.2rem;
+  text-align: center;
+  color: var(--main-text-color);
+  margin: 0;
+  line-height: 1.5;
+}
+
+.confirmation-buttons {
+  display: flex;
+  justify-content: center;
+  gap: 1rem;
+}
+
+.confirm-cancel-button {
+  border-radius: 4px;
+  width: 110px;
+  height: 40px;
+  background-color: white;
+  border: none;
+  font-family: Gabarito;
+  font-size: 1rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s;
+  box-shadow:
+    rgba(50, 50, 93, 0.25) 0px 6px 12px -2px,
+    rgba(0, 0, 0, 0.3) 0px 3px 7px -3px;
+}
+
+.confirm-cancel-button:hover {
+  background-color: #f0f0f0;
+  transform: translateY(-2px);
+}
+
+.confirm-proceed-button {
+  border-radius: 4px;
+  width: 110px;
+  height: 40px;
+  background-color: var(--primary-bg-color);
+  color: white;
+  font-family: Gabarito;
+  font-size: 1rem;
+  font-weight: 500;
+  border: none;
+  cursor: pointer;
+  transition: all 0.2s;
+  box-shadow:
+    rgba(50, 50, 93, 0.25) 0px 6px 12px -2px,
+    rgba(0, 0, 0, 0.3) 0px 3px 7px -3px;
+}
+
+.confirm-proceed-button:hover {
+  opacity: 0.9;
+  transform: translateY(-2px);
+}
+
 @media (max-width: 768px) {
   .main-card {
     width: 100%;
@@ -573,14 +657,6 @@ button:hover {
     height: 100%;
     overflow-y: scroll;
   }
-}
-
-.stat-button {
-  width: 3rem;
-  background-color: var(--primary-bg-color);
-  border: none;
-  transition: background-color 0.4s ease;
-  cursor: pointer;
 }
 
 @media (max-width: 425px) {
