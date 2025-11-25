@@ -24,6 +24,8 @@ function MainContent() {
    const [audioContext, setAudioContext] = useState(null);
    const [audioBuffer, setAudioBuffer] = useState(null);
    const [pomodoroCount, setPomodoroCount] = useState(0); // Track completed pomodoros for break cycle
+   const [startTimestamp, setStartTimestamp] = useState(null); // Track when timer started
+   const [targetEndTime, setTargetEndTime] = useState(null); // Track when timer should end
 
    // Function to reset timer to initial pomodoro state
    const resetToPomodoro = () => {
@@ -122,17 +124,43 @@ function MainContent() {
    // to do: make a ticking ticking sound (katamad)
    // const tickingSound = new Audio("");
 
+   // Accurate timer using timestamp-based calculation
    useEffect(() => {
-      let realTime;
+      let intervalId;
 
-      if (currentTime > 0 && timeRunning) {
-         realTime = setInterval(() => {
-            setCurrentTime((prev) => prev - 1);
-         }, 1000);
+      if (timeRunning && currentTime > 0) {
+         // Set the target end time when timer starts
+         if (!targetEndTime) {
+            const now = Date.now();
+            setStartTimestamp(now);
+            setTargetEndTime(now + (currentTime * 1000));
+         }
+
+         // Use a shorter interval for more frequent checks (100ms)
+         intervalId = setInterval(() => {
+            const now = Date.now();
+            const remainingMs = targetEndTime - now;
+            const remainingSeconds = Math.ceil(remainingMs / 1000);
+
+            if (remainingSeconds <= 0) {
+               // Timer finished
+               setCurrentTime(0);
+               setTimeRunning(false);
+               setTargetEndTime(null);
+               setStartTimestamp(null);
+            } else if (remainingSeconds !== currentTime) {
+               // Update the display
+               setCurrentTime(remainingSeconds);
+            }
+         }, 100); // Check every 100ms for smooth updates
+      } else if (!timeRunning) {
+         // Reset timestamps when paused
+         setTargetEndTime(null);
+         setStartTimestamp(null);
       }
 
-      if (currentTime === 0 && timeRunning) {
-         setTimeRunning(false);
+      // Handle timer completion
+      if (currentTime === 0 && !timeRunning && (startTimestamp !== null || activeBtn)) {
          playAlarm(); // Use the enhanced alarm function
 
          // Handle the cycle based on current mode
@@ -214,9 +242,11 @@ function MainContent() {
       }
 
       return () => {
-         clearInterval(realTime);
+         if (intervalId) {
+            clearInterval(intervalId);
+         }
       };
-   }, [currentTime, timeRunning, selectedTask, activeBtn]);
+   }, [timeRunning, currentTime, targetEndTime, selectedTask, activeBtn, pomodoroCount]);
 
    function formattedTime(time) {
       const mins = Math.floor(time / 60);
