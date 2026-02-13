@@ -5,6 +5,7 @@ import ShowChartIcon from "@mui/icons-material/ShowChart";
 
 import { useState, useEffect } from "react";
 function Navigation() {
+  const MotionNav = motion.nav;
   const [infoVisibility, setInfoVisibility] = useState(false);
   const [chartVisibility, setChartVisibility] = useState(false);
   const [stats, setStats] = useState({ totalPomo: 0, hours: 0 });
@@ -27,7 +28,7 @@ function Navigation() {
 
   return (
     <div className="nav-container">
-      <motion.nav
+      <MotionNav
         initial={{ opacity: 0, y: -100 }}
         animate={{ opacity: 1, y: 0, transition: { duration: 1.7 } }}
         className="main-nav"
@@ -41,7 +42,7 @@ function Navigation() {
             <InfoOutlineIcon sx={{ fontSize: 32, color: "white" }} />
           </button>
         </div>
-      </motion.nav>
+      </MotionNav>
       {infoVisibility && <Info openInfo={openInfo} />}
       {chartVisibility && (
         <div className="modal-overlay" style={{zIndex: "30"}}>

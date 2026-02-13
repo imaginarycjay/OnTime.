@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { motion } from "framer-motion";
+import { motion as Motion } from "framer-motion";
 import TaskManager from "./tasks.jsx";
 import Modal from "./modal.jsx";
 import ConfirmModal from "./confirmModal.jsx";
@@ -449,7 +449,7 @@ function MainContent() {
 
    return (
       <main className="root-parent">
-         <motion.div
+         <Motion.div
             initial={{ opacity: 0, x: -500 }}
             animate={{ opacity: 1, x: 0, transition: { duration: 0.6 } }}
             className="main-pomodoro"
@@ -533,7 +533,7 @@ function MainContent() {
                   )}
                </div>
             </div>
-         </motion.div>
+         </Motion.div>
 
          <TaskManager
             taskList={list.length}

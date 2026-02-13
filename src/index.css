@@ -328,7 +328,7 @@ button:hover {
 .modal-container {
   background-color: var(--secondary-bg-color);
   width: 35%;
-  height: 30%;
+  height: auto;
   border-radius: 10px;
   display: flex;
   flex-direction: column;
@@ -345,20 +345,21 @@ button:hover {
   width: auto;
   height: 37%;
   margin-top: 2rem;
-  /* border: 1px red solid; */
   display: flex;
   justify-content: center;
   align-items: center;
   flex-direction: column;
+    gap: 8px;
+    margin-bottom: 1rem;
 }
 
 .modal-container > form > input {
   width: 85%;
-  height: 100%;
+  height: 2rem;
   border: var(--secondary-bg-color) 1px solid;
   padding-left: 1rem;
-  font-family: Poppins;
-  font-size: larger;
+  font-family: Poppins, sans-serif;
+  font-size: medium;
   box-shadow:
     rgba(50, 50, 93, 0.25) 0px 6px 12px -2px,
     rgba(0, 0, 0, 0.3) 0px 3px 7px -3px;
@@ -639,6 +640,27 @@ button:hover {
 .confirm-proceed-button:hover {
   opacity: 0.9;
   transform: translateY(-2px);
+}
+
+.modal-textarea {
+  width: 85%;
+  min-height: 80px;
+  margin-top: 0.5rem;
+  border: none;
+  border-radius: 6px;
+  padding: 0.75rem;
+  font-family: Poppins;
+  resize: vertical;
+}
+
+.modal-error {
+  color: #ffe8e8;
+  font-size: 0.9rem;
+  margin: 0.5rem 0;
+}
+
+.confirmation-icon {
+  margin-right: 0.5rem;
 }
 
 @media (max-width: 768px) {

@@ -19,6 +19,7 @@ export default function Task({
   setTimeRunning,
   resetToPomodoro,
 }) {
+  const MotionLi = motion.li;
   const [showOptions, setShowOptions] = useState(false);
   const [showSwitchConfirm, setShowSwitchConfirm] = useState(false);
   const [pendingTask, setPendingTask] = useState(null);
@@ -55,18 +56,18 @@ export default function Task({
   };
 
   const handleTaskSelect = (task) => {
-    // If clicking on the same task, just pause/unpause
-    if (selectedTask && selectedTask.name === task.name) {
-      setTimeRunning(!timeRunning);
-    } else if (timeRunning && selectedTask) {
-      // If timer is running on a different task, show confirmation
+    // New behavior: clicking a task only selects it and updates the "Focusing" display.
+    // It will NOT start or pause the timer. The main START button controls running state.
+
+    // If timer is running and there's an active selected task (different from clicked), ask for confirmation
+    if (timeRunning && selectedTask && selectedTask.name !== task.name) {
       setPendingTask(task);
       setShowSwitchConfirm(true);
-    } else {
-      // If timer is not running, just switch
-      setSelectedTask(task);
-      setTimeRunning(true);
+      return;
     }
+
+    // Otherwise just select the task (no auto-start)
+    setSelectedTask(task);
   };
 
   const confirmSwitchTask = () => {
@@ -147,8 +148,11 @@ export default function Task({
               {" "}
               <AnimatePresence>
                 {list.map((task, index) => {
+                  const isRunning =
+                    selectedTask && selectedTask.name === task.name && timeRunning;
+
                   return (
-                    <motion.li
+                    <MotionLi
                       initial={{ opacity: 0, y: 30 }}
                       animate={{ opacity: 1, y: 0 }}
                       exit={{ opacity: 1, x: 300 }}
@@ -157,19 +161,15 @@ export default function Task({
                       key={index}
                     >
                       - {task.name} ({task.pomoDone}/{task.pomoTotal})
-                      <div>
+                      <div className="task-actions">
                         <button
                           className="select-task-btn"
                           onClick={() => handleTaskSelect(task)}
+                          aria-label={isRunning ? "Selected (running)" : "Select task"}
+                          title={isRunning ? "Selected (running)" : "Select task"}
                         >
-                          {selectedTask &&
-                          selectedTask.name === task.name &&
-                          timeRunning ? (
-                            <PauseIcon
-                              sx={{
-                                fontSize: 20,
-                              }}
-                            />
+                          {isRunning ? (
+                            <PauseIcon sx={{ fontSize: 20 }} />
                           ) : (
                             <PlayArrowIcon sx={{ fontSize: 20 }} />
                           )}
@@ -191,7 +191,7 @@ export default function Task({
                           </>
                         )}
                       </div>
-                    </motion.li>
+                    </MotionLi>
                   );
                 })}
               </AnimatePresence>
