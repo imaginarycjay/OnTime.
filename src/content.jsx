@@ -14,7 +14,12 @@ function MainContent() {
    const [selectedTask, setSelectedTask] = useState(null);
    const [list, setList] = useState(() => {
       const stored = localStorage.getItem("myTODOs");
-      return stored ? JSON.parse(stored) : [];
+      if (stored) {
+         const tasks = JSON.parse(stored);
+         // Add backward compatibility: tasks without mode field default to "standard"
+         return tasks.map(task => ({ ...task, mode: task.mode || "standard" }));
+      }
+      return [];
    });
    const [showSelectTaskModal, setShowSelectTaskModal] = useState(false);
    const [showTaskDoneModal, setShowTaskDoneModal] = useState(false);

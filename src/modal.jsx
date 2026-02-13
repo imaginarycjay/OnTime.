@@ -5,6 +5,7 @@ export default function Modal({ grabData, openModal, initialValue = "", isEditin
   const MotionDiv = motion.div;
   const [inputValue, setInputValue] = useState(initialValue.name || initialValue || "");
   const [pomoTotal, setPomoTotal] = useState(initialValue.pomoTotal || 1);
+  const [taskMode, setTaskMode] = useState(initialValue.mode || "standard");
   const [subject, setSubject] = useState(initialValue.subject || "");
   const [specificTopic, setSpecificTopic] = useState(initialValue.specificTopic || "");
   const [subtopics, setSubtopics] = useState(initialValue.subtopics || []);
@@ -15,6 +16,7 @@ export default function Modal({ grabData, openModal, initialValue = "", isEditin
   useEffect(() => {
     setInputValue(initialValue.name || initialValue || "");
     setPomoTotal(initialValue.pomoTotal || 1);
+    setTaskMode(initialValue.mode || "standard");
     setSubject(initialValue.subject || "");
     setSpecificTopic(initialValue.specificTopic || "");
     setSubtopics(initialValue.subtopics || []);
@@ -24,9 +26,9 @@ export default function Modal({ grabData, openModal, initialValue = "", isEditin
   const handleSubmit = (e) => {
     e.preventDefault();
     if (isEditing) {
-      grabData({ result: { ...initialValue, name: inputValue, pomoTotal, subject, specificTopic, subtopics, studyNotes }, isEditing });
+      grabData({ result: { ...initialValue, name: inputValue, pomoTotal, mode: taskMode, subject: taskMode === "study" ? subject : "", specificTopic: taskMode === "study" ? specificTopic : "", subtopics: taskMode === "study" ? subtopics : [], studyNotes: taskMode === "study" ? studyNotes : [] }, isEditing });
     } else {
-      grabData({ result: { name: inputValue, pomoTotal, pomoDone: 0, subject, specificTopic, subtopics, studyNotes }, isEditing });
+      grabData({ result: { name: inputValue, pomoTotal, pomoDone: 0, mode: taskMode, subject: taskMode === "study" ? subject : "", specificTopic: taskMode === "study" ? specificTopic : "", subtopics: taskMode === "study" ? subtopics : [], studyNotes: taskMode === "study" ? studyNotes : [] }, isEditing });
     }
     openModal();
   };
@@ -57,6 +59,31 @@ export default function Modal({ grabData, openModal, initialValue = "", isEditin
         className="modal-container"
       >
         <form id="modal-form" onSubmit={handleSubmit}>
+          <div style={{ marginBottom: 16 }}>
+            <label style={{ display: 'block', marginBottom: 8, color: 'white', fontWeight: 500 }}>Task Mode:</label>
+            <div style={{ display: 'flex', gap: 16 }}>
+              <label style={{ display: 'flex', alignItems: 'center', gap: 8, color: 'white', cursor: 'pointer' }}>
+                <input
+                  type="radio"
+                  value="standard"
+                  checked={taskMode === "standard"}
+                  onChange={(e) => setTaskMode(e.target.value)}
+                  style={{ cursor: 'pointer' }}
+                />
+                Standard Pomodoro
+              </label>
+              <label style={{ display: 'flex', alignItems: 'center', gap: 8, color: 'white', cursor: 'pointer' }}>
+                <input
+                  type="radio"
+                  value="study"
+                  checked={taskMode === "study"}
+                  onChange={(e) => setTaskMode(e.target.value)}
+                  style={{ cursor: 'pointer' }}
+                />
+                Study Mode
+              </label>
+            </div>
+          </div>
           <input
             className="modal-input"
             type="text"
@@ -65,38 +92,42 @@ export default function Modal({ grabData, openModal, initialValue = "", isEditin
             required
             placeholder="Add task here..."
           />
-          <input
-            className="modal-input"
-            type="text"
-            value={subject}
-            onChange={(e) => setSubject(e.target.value)}
-            placeholder="Subject (e.g. Science)"
-          />
-          <input
-            className="modal-input"
-            type="text"
-            value={specificTopic}
-            onChange={(e) => setSpecificTopic(e.target.value)}
-            placeholder="Specific topic (required for study pack)"
-            required
-          />
-          <button type="button" className="modal-add-butt" onClick={handleGenerate} disabled={isGenerating}>
-            {isGenerating ? "Generating..." : "Generate Study Pack"}
-          </button>
-          {error && <p className="modal-error">{error}</p>}
-          {!!subtopics.length && (
-            <textarea
-              className="modal-textarea"
-              value={subtopics.join("\n")}
-              onChange={(e) => setSubtopics(e.target.value.split("\n"))}
-            />
-          )}
-          {!!studyNotes.length && (
-            <textarea
-              className="modal-textarea"
-              value={studyNotes.join("\n")}
-              onChange={(e) => setStudyNotes(e.target.value.split("\n"))}
-            />
+          {taskMode === "study" && (
+            <>
+              <input
+                className="modal-input"
+                type="text"
+                value={subject}
+                onChange={(e) => setSubject(e.target.value)}
+                placeholder="Subject (e.g. Science)"
+              />
+              <input
+                className="modal-input"
+                type="text"
+                value={specificTopic}
+                onChange={(e) => setSpecificTopic(e.target.value)}
+                placeholder="Specific topic (required for study pack)"
+                required
+              />
+              <button type="button" className="modal-add-butt" onClick={handleGenerate} disabled={isGenerating}>
+                {isGenerating ? "Generating..." : "Generate Study Pack"}
+              </button>
+              {error && <p className="modal-error">{error}</p>}
+              {!!subtopics.length && (
+                <textarea
+                  className="modal-textarea"
+                  value={subtopics.join("\n")}
+                  onChange={(e) => setSubtopics(e.target.value.split("\n"))}
+                />
+              )}
+              {!!studyNotes.length && (
+                <textarea
+                  className="modal-textarea"
+                  value={studyNotes.join("\n")}
+                  onChange={(e) => setStudyNotes(e.target.value.split("\n"))}
+                />
+              )}
+            </>
           )}
           <div style={{ display: 'flex', alignItems: 'center', marginTop: 8 }}>
             <button className="pomoAdder" type="button" onClick={() => setPomoTotal(Math.max(1, pomoTotal - 1))}>-</button>

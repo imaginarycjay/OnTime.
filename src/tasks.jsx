@@ -3,7 +3,8 @@ import { useEffect, useState } from "react";
 import MoreVertIcon from "@mui/icons-material/MoreVert";
 import PlayArrowIcon from "@mui/icons-material/PlayArrow";
 import PauseIcon from "@mui/icons-material/Pause";
-
+import MenuBookIcon from "@mui/icons-material/MenuBook";
+import TimerIcon from "@mui/icons-material/Timer";
 import EditIcon from "@mui/icons-material/Edit";
 import DeleteIcon from "@mui/icons-material/Delete";
 import ConfirmModal from "./confirmModal.jsx";
@@ -160,7 +161,11 @@ export default function Task({
                       className="task-items"
                       key={index}
                     >
-                      - {task.name} ({task.pomoDone}/{task.pomoTotal})
+                      {task.mode === "study" ? (
+                        <MenuBookIcon sx={{ fontSize: 16, marginRight: 0.5, verticalAlign: 'text-bottom' }} />
+                      ) : (
+                        <TimerIcon sx={{ fontSize: 16, marginRight: 0.5, verticalAlign: 'text-bottom' }} />
+                      )} {task.name} ({task.pomoDone}/{task.pomoTotal})
                       <div className="task-actions">
                         <button
                           className="select-task-btn"
