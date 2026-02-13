@@ -10,6 +10,7 @@ export default function Modal({ grabData, openModal, initialValue = "", isEditin
   const [specificTopic, setSpecificTopic] = useState(initialValue.specificTopic || "");
   const [subtopics, setSubtopics] = useState(initialValue.subtopics || []);
   const [studyNotes, setStudyNotes] = useState(initialValue.studyNotes || []);
+  const [quizzes, setQuizzes] = useState(initialValue.quizzes || []);
   const [isGenerating, setIsGenerating] = useState(false);
   const [error, setError] = useState("");
 
@@ -21,14 +22,15 @@ export default function Modal({ grabData, openModal, initialValue = "", isEditin
     setSpecificTopic(initialValue.specificTopic || "");
     setSubtopics(initialValue.subtopics || []);
     setStudyNotes(initialValue.studyNotes || []);
+    setQuizzes(initialValue.quizzes || []);
   }, [initialValue]);
 
   const handleSubmit = (e) => {
     e.preventDefault();
     if (isEditing) {
-      grabData({ result: { ...initialValue, name: inputValue, pomoTotal, mode: taskMode, subject: taskMode === "study" ? subject : "", specificTopic: taskMode === "study" ? specificTopic : "", subtopics: taskMode === "study" ? subtopics : [], studyNotes: taskMode === "study" ? studyNotes : [] }, isEditing });
+      grabData({ result: { ...initialValue, name: inputValue, pomoTotal, mode: taskMode, subject: taskMode === "study" ? subject : "", specificTopic: taskMode === "study" ? specificTopic : "", subtopics: taskMode === "study" ? subtopics : [], studyNotes: taskMode === "study" ? studyNotes : [], quizzes: taskMode === "study" ? quizzes : [] }, isEditing });
     } else {
-      grabData({ result: { name: inputValue, pomoTotal, pomoDone: 0, mode: taskMode, subject: taskMode === "study" ? subject : "", specificTopic: taskMode === "study" ? specificTopic : "", subtopics: taskMode === "study" ? subtopics : [], studyNotes: taskMode === "study" ? studyNotes : [] }, isEditing });
+      grabData({ result: { name: inputValue, pomoTotal, pomoDone: 0, mode: taskMode, subject: taskMode === "study" ? subject : "", specificTopic: taskMode === "study" ? specificTopic : "", subtopics: taskMode === "study" ? subtopics : [], studyNotes: taskMode === "study" ? studyNotes : [], quizzes: taskMode === "study" ? quizzes : [] }, isEditing });
     }
     openModal();
   };
@@ -44,6 +46,7 @@ export default function Modal({ grabData, openModal, initialValue = "", isEditin
       const response = await window.studyApi.generateStudyPack({ subject, specificTopic });
       setSubtopics(response.subtopics || []);
       setStudyNotes(response.studyNotes || []);
+      setQuizzes(response.quizzes || []);
     } catch (err) {
       setError(err.message || "Failed to generate study pack");
     } finally {

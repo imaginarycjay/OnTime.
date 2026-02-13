@@ -197,10 +197,36 @@ function MainContent() {
                   ) || {
                      totalPomo: 0,
                      hours: 0,
+                     studyPomo: 0,
+                     standardPomo: 0,
                   };
                   stats.totalPomo += 1;
                   stats.hours += 25 / 60;
+                  
+                  // Track study vs standard separately
+                  if (selectedTask.mode === "study") {
+                     stats.studyPomo = (stats.studyPomo || 0) + 1;
+                  } else {
+                     stats.standardPomo = (stats.standardPomo || 0) + 1;
+                  }
+                  
                   localStorage.setItem("ontime_stats", JSON.stringify(stats));
+                  
+                  // Record session history
+                  const sessions = JSON.parse(localStorage.getItem("ontime_sessions")) || [];
+                  sessions.push({
+                     id: Date.now().toString() + Math.random(),
+                     taskName: selectedTask.name,
+                     type: "pomodoro",
+                     mode: selectedTask.mode || "standard",
+                     startTime: Date.now() - (25 * 60 * 1000),
+                     endTime: Date.now(),
+                     duration: 1500,
+                     completed: true,
+                     subject: selectedTask.subject || "",
+                     topic: selectedTask.specificTopic || ""
+                  });
+                  localStorage.setItem("ontime_sessions", JSON.stringify(sessions));
 
                   // Check if task is completed
                   if (updatedTask.pomoDone >= updatedTask.pomoTotal) {
