@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+import { motion } from "framer-motion";
 import CloseRoundedIcon from "@mui/icons-material/CloseRounded";
 import {
   LineChart,
@@ -179,7 +180,7 @@ export default function Analytics({ onClose, database }) {
                   <div className="stat-label">Total Pomodoros</div>
                 </div>
                 <div className="stat-card">
-                  <div className="stat-number">{stats.hours.toFixed(1)}h</div>
+                  <div className="stat-number">{(Number(stats.hours) || 0).toFixed(1)}h</div>
                   <div className="stat-label">Hours Focused</div>
                 </div>
                 <div className="stat-card">

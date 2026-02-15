@@ -38,11 +38,6 @@ export default function Modal({ grabData, openModal, initialValue = "", isEditin
   };
 
   const handleGenerate = async () => {
-    if (!isOnline) {
-      setError("No internet connection. Study pack generation requires internet access.");
-      return;
-    }
-    
     if (!specificTopic.trim()) {
       setError("Specific topic is required for study content");
       return;
@@ -134,10 +129,10 @@ export default function Modal({ grabData, openModal, initialValue = "", isEditin
                 type="button" 
                 className="modal-add-butt" 
                 onClick={handleGenerate} 
-                disabled={isGenerating || !isOnline}
-                style={{ opacity: (!isOnline || isGenerating) ? 0.6 : 1 }}
+                disabled={isGenerating}
+                style={{ opacity: isGenerating ? 0.6 : 1 }}
               >
-                {isGenerating ? "Generating..." : !isOnline ? "Offline - Cannot Generate" : "Generate Study Pack"}
+                {isGenerating ? "Generating..." : "Generate Study Pack"}
               </button>
               {error && <p className="modal-error" style={{ color: '#ef4444', fontSize: '0.9rem', marginTop: '0.5rem' }}>{error}</p>}
               
@@ -225,7 +220,7 @@ export default function Modal({ grabData, openModal, initialValue = "", isEditin
                 <button
                   type="button"
                   onClick={handleRegenerate}
-                  disabled={isGenerating || !isOnline}
+                  disabled={isGenerating}
                   style={{ 
                     marginTop: '1rem',
                     padding: '0.5rem 1rem',
@@ -235,7 +230,7 @@ export default function Modal({ grabData, openModal, initialValue = "", isEditin
                     color: 'white',
                     cursor: 'pointer',
                     fontSize: '0.9rem',
-                    opacity: (!isOnline || isGenerating) ? 0.5 : 1
+                    opacity: isGenerating ? 0.5 : 1
                   }}
                 >
                   🔄 Regenerate Study Pack

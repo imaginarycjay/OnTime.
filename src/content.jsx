@@ -3,6 +3,7 @@ import { motion as Motion } from "framer-motion";
 import TaskManager from "./tasks.jsx";
 import Modal from "./modal.jsx";
 import ConfirmModal from "./confirmModal.jsx";
+import Quiz from "./quiz.jsx";
 
 function MainContent({ isOnline, database }) {
    const [currentTime, setCurrentTime] = useState(25 * 60);
@@ -24,6 +25,7 @@ function MainContent({ isOnline, database }) {
    const [showSelectTaskModal, setShowSelectTaskModal] = useState(false);
    const [showTaskDoneModal, setShowTaskDoneModal] = useState(false);
    const [showConfirmModal, setShowConfirmModal] = useState(false);
+   const [showQuizStartConfirm, setShowQuizStartConfirm] = useState(false);
    const [pendingSwitch, setPendingSwitch] = useState(null);
    const [showRefreshConfirm, setShowRefreshConfirm] = useState(false);
    const [audioContext, setAudioContext] = useState(null);
@@ -31,6 +33,7 @@ function MainContent({ isOnline, database }) {
    const [pomodoroCount, setPomodoroCount] = useState(0); // Track completed pomodoros for break cycle
    const [startTimestamp, setStartTimestamp] = useState(null); // Track when timer started
    const [targetEndTime, setTargetEndTime] = useState(null); // Track when timer should end
+   const [showMainQuiz, setShowMainQuiz] = useState(false);
 
    // Function to reset timer to initial pomodoro state
    const resetToPomodoro = () => {
@@ -362,9 +365,72 @@ function MainContent({ isOnline, database }) {
          const newList = [...list];
          newList[editingData.index] = data.result;
          setList(newList);
+
+         if (selectedTask && editingData.index !== undefined) {
+            const selectedIndex = list.findIndex((task) => {
+               if (selectedTask.id && task.id) return selectedTask.id === task.id;
+               return (
+                  task.name === selectedTask.name &&
+                  task.pomoTotal === selectedTask.pomoTotal &&
+                  task.pomoDone === selectedTask.pomoDone
+               );
+            });
+
+            if (selectedIndex === editingData.index) {
+               setSelectedTask(data.result);
+            }
+         }
       } else {
          setList((prev) => [...prev, data.result]);
       }
+   }
+
+   function hasStudyPack(task) {
+      return !!(task && task.mode === "study" && Array.isArray(task.quizzes) && task.quizzes.length > 0);
+   }
+
+   function openSelectedTaskForStudyPack() {
+      if (!selectedTask || selectedTask.mode !== "study") return;
+
+      const index = list.findIndex((task) => {
+         if (selectedTask.id && task.id) return selectedTask.id === task.id;
+         return (
+            task.name === selectedTask.name &&
+            task.pomoTotal === selectedTask.pomoTotal &&
+            task.pomoDone === selectedTask.pomoDone
+         );
+      });
+
+      if (index !== -1) {
+         setEditingData({ index, text: list[index] });
+         setModalOpen(true);
+      }
+   }
+
+   function handleStudyActionClick() {
+      if (!selectedTask || selectedTask.mode !== "study") return;
+
+      if (!hasStudyPack(selectedTask)) {
+         openSelectedTaskForStudyPack();
+         return;
+      }
+
+      if (timeRunning) {
+         setShowQuizStartConfirm(true);
+         return;
+      }
+
+      setShowMainQuiz(true);
+   }
+
+   function confirmQuizStart() {
+      setTimeRunning(false);
+      setShowQuizStartConfirm(false);
+      setShowMainQuiz(true);
+   }
+
+   function cancelQuizStart() {
+      setShowQuizStartConfirm(false);
    }
 
    function confirmRefresh() {
@@ -549,6 +615,11 @@ function MainContent({ isOnline, database }) {
                      <button onClick={startTime} className="start-button">
                         {!timeRunning ? "START" : "PAUSE"}
                      </button>
+                     {selectedTask && selectedTask.mode === "study" && (
+                        <button onClick={handleStudyActionClick} className="study-action-button">
+                           {hasStudyPack(selectedTask) ? "Quiz Now" : "Generate Study Pack"}
+                        </button>
+                     )}
                      <button onClick={toggleModal} className="add-task-button">
                         Add Task +
                      </button>
@@ -637,6 +708,22 @@ function MainContent({ isOnline, database }) {
                message="Are you sure you want to refresh? You will lose any unsaved progress."
                onConfirm={confirmRefresh}
                onCancel={cancelRefresh}
+            />
+         )}
+         {showQuizStartConfirm && (
+            <ConfirmModal
+               message="Starting quiz will pause the timer. Continue?"
+               onConfirm={confirmQuizStart}
+               onCancel={cancelQuizStart}
+               confirmLabel="Quiz Now"
+            />
+         )}
+         {showMainQuiz && selectedTask && (
+            <Quiz
+               task={selectedTask}
+               onClose={() => setShowMainQuiz(false)}
+               onComplete={() => {}}
+               database={database}
             />
          )}
       </main>

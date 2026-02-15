@@ -4,7 +4,7 @@ import MainContent from "./content.jsx";
 import database from "./services/database.js";
 
 function App() {
-   const [isOnline, setIsOnline] = useState(true);
+   const [isOnline, setIsOnline] = useState(window.navigator.onLine);
    const [dbReady, setDbReady] = useState(false);
 
    useEffect(() => {
@@ -19,8 +19,14 @@ function App() {
       });
 
       // Online/Offline detection
-      const handleOnline = () => setIsOnline(true);
-      const handleOffline = () => setIsOnline(false);
+      const handleOnline = () => {
+         console.log('Online event fired');
+         setIsOnline(true);
+      };
+      const handleOffline = () => {
+         console.log('Offline event fired');
+         setIsOnline(false);
+      };
 
       window.addEventListener('online', handleOnline);
       window.addEventListener('offline', handleOffline);

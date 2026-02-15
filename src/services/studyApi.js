@@ -18,8 +18,26 @@ const studyApi = {
          );
 
          if (!response.ok) {
-            const errorData = await response.json().catch(() => ({}));
-            throw new Error(errorData.error || "Failed to generate study pack");
+            const rawText = await response.text();
+            let parsedMessage = "";
+
+            try {
+               const errorData = JSON.parse(rawText);
+               parsedMessage = errorData.error || "";
+            } catch {
+               const htmlMatch = rawText.match(/<pre>(.*?)<\/pre>/s);
+               if (htmlMatch?.[1]) {
+                  parsedMessage = htmlMatch[1]
+                     .replace(/<br\s*\/?\s*>/gi, "\n")
+                     .replace(/<[^>]+>/g, "")
+                     .trim();
+               }
+            }
+
+            throw new Error(
+               parsedMessage ||
+                  `Failed to generate study pack (HTTP ${response.status})`,
+            );
          }
 
          const result = await response.json();
@@ -42,10 +60,17 @@ const studyApi = {
       } catch (err) {
          console.error("Study API Error:", err);
 
-         // Check if it's a network error (offline)
-         if (err.message === "Failed to fetch" || !navigator.onLine) {
+         // Offline case
+         if (!window.navigator.onLine) {
             throw new Error(
                "No internet connection. Study pack generation requires internet access.",
+            );
+         }
+
+         // Frontend is online but API server is not reachable
+         if (err instanceof TypeError && err.message === "Failed to fetch") {
+            throw new Error(
+               "Cannot reach study server at http://localhost:3001. Start gemini-server first.",
             );
          }
 

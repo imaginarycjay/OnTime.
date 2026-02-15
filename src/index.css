@@ -103,7 +103,8 @@ button:hover {
   margin-left: auto;
   margin-right: auto;
   /* border: violet 2px solid; */
-  height: 19rem;
+  min-height: 21.5rem;
+  height: auto;
   width: 420px;
   background-color: var(--secondary-bg-color);
   display: flex;
@@ -152,6 +153,31 @@ button:hover {
   cursor: pointer;
   box-shadow: inset 0px -4px 2px rgba(0, 0, 0, 0.2);
   transition: color 0.4s ease;
+}
+
+.study-action-button {
+  font-family: Poppins;
+  font-weight: 600;
+  color: #0f5132;
+  background-color: #d1fae5;
+  font-size: 20px;
+  padding: 10px 60px;
+  line-height: 1.2;
+  min-height: 52px;
+  border-radius: 5px;
+  border: none;
+  cursor: pointer;
+  box-shadow: inset 0px -4px 2px rgba(0, 0, 0, 0.2);
+  transition: all 0.2s ease;
+}
+
+.study-action-button:hover {
+  background-color: #a7f3d0;
+}
+
+.study-action-button:active {
+  transform: translateY(4px);
+  box-shadow: inset 0px 0px 2px rgba(0, 0, 0, 0);
 }
 
 .start-button:active {
@@ -209,7 +235,8 @@ button:hover {
 }
 
 .task-card {
-  height: 19rem;
+  min-height: 21.5rem;
+  height: auto;
   width: 26rem;
   background-color: var(--secondary-bg-color);
   border-radius: 7px;
@@ -343,6 +370,9 @@ button:hover {
 
 .modal-container > form {
   width: auto;
+  overflow: auto;
+  overflow: scroll;
+  overflow-y: auto;
   height: 37%;
   margin-top: 2rem;
   display: flex;
@@ -388,8 +418,10 @@ button:hover {
 
 .modal-add-butt {
   border-radius: 4px;
-  width: 85px;
-  height: 30px;
+  min-width: 150px;
+  width: auto;
+  padding: 8px 16px;
+  height: auto;
   background-color: var(--primary-bg-color);
   color: white;
   font-family: Poppins;
@@ -398,6 +430,7 @@ button:hover {
   box-shadow:
     rgba(50, 50, 93, 0.25) 0px 6px 12px -2px,
     rgba(0, 0, 0, 0.3) 0px 3px 7px -3px;
+  transition: all 0.2s ease;
 }
 .modal-cancel-butt {
   border-radius: 4px;
