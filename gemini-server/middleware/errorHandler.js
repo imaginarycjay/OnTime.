@@ -1,4 +1,5 @@
-export function errorHandler(err, req, res) {
+export function errorHandler(err, req, res, next) {
+   void next;
    console.error("Error:", err);
 
    // Handle specific error types
@@ -20,8 +21,8 @@ export function errorHandler(err, req, res) {
       });
    }
 
-   // Default error response
-   res.status(err.status || 500).json({
+   // Default error response (always JSON)
+   return res.status(err.status || 500).json({
       error: err.message || "An unexpected error occurred",
    });
 }

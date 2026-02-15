@@ -1,12 +1,13 @@
-const GEMINI_API_KEY = process.env.GEMINI_API_KEY;
-const GEMINI_ENDPOINT =
-   "https://generativelanguage.googleapis.com/v1beta/models/gemini-pro:generateContent";
-
-if (!GEMINI_API_KEY) {
-   console.error("⚠️  GEMINI_API_KEY not found in environment variables");
-}
+const GEMINI_MODEL = process.env.GEMINI_MODEL || "gemini-2.5-flash";
+const GEMINI_ENDPOINT = `https://generativelanguage.googleapis.com/v1beta/models/${GEMINI_MODEL}:generateContent`;
 
 export async function generateStudyPack({ subject, specificTopic }) {
+   const GEMINI_API_KEY = process.env.GEMINI_API_KEY?.trim();
+
+   if (!GEMINI_API_KEY) {
+      throw new Error("GEMINI_API_KEY is missing in server environment");
+   }
+
    const subjectPart = subject ? ` in ${subject}` : "";
 
    const prompt = `You are an expert educator. Generate a comprehensive study pack for the topic: "${specificTopic}"${subjectPart}.
@@ -54,7 +55,7 @@ Return ONLY the JSON object, no additional text.`;
       });
 
       if (!response.ok) {
-         const errorData = await response.json();
+         const errorData = await response.json().catch(() => ({}));
          throw new Error(
             errorData.error?.message || "Gemini API request failed",
          );
