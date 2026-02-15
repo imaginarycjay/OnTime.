@@ -1,5 +1,4 @@
 import { useState, useEffect } from "react";
-import { motion } from "framer-motion";
 import CloseRoundedIcon from "@mui/icons-material/CloseRounded";
 import {
   LineChart,
@@ -17,7 +16,7 @@ import {
   ResponsiveContainer,
 } from "recharts";
 
-export default function Analytics({ onClose }) {
+export default function Analytics({ onClose, database }) {
   const [activeTab, setActiveTab] = useState("overview");
   const [stats, setStats] = useState({
     totalPomo: 0,
@@ -29,7 +28,34 @@ export default function Analytics({ onClose }) {
   const [quizResults, setQuizResults] = useState([]);
 
   useEffect(() => {
-    // Load data from localStorage
+    // Load data from database if available, otherwise fallback to localStorage
+    if (database && database.initialized) {
+      try {
+        const dbStats = database.getStats();
+        const dbSessions = database.getAllSessions();
+        const dbQuizResults = database.getQuizResults();
+
+        if (dbStats) {
+          setStats({
+            totalPomo: dbStats.total_pomodoros || 0,
+            hours: dbStats.total_hours || 0,
+            studyPomo: dbStats.study_sessions || 0,
+            standardPomo: dbStats.standard_sessions || 0,
+          });
+        }
+
+        setSessions(dbSessions || []);
+        setQuizResults(dbQuizResults || []);
+      } catch (err) {
+        console.error('Error loading from database:', err);
+        loadFromLocalStorage();
+      }
+    } else {
+      loadFromLocalStorage();
+    }
+  }, [database]);
+
+  const loadFromLocalStorage = () => {
     const storedStats = JSON.parse(localStorage.getItem("ontime_stats")) || {
       totalPomo: 0,
       hours: 0,
@@ -42,7 +68,7 @@ export default function Analytics({ onClose }) {
     setStats(storedStats);
     setSessions(storedSessions);
     setQuizResults(storedQuizzes);
-  }, []);
+  };
 
   // Process sessions for daily productivity chart
   const getDailyProductivity = () => {
@@ -55,7 +81,8 @@ export default function Analytics({ onClose }) {
       const dateStr = date.toLocaleDateString("en-US", { month: "short", day: "numeric" });
 
       const daySessions = sessions.filter((s) => {
-        const sessionDate = new Date(s.endTime);
+        // Handle both database format (completed_at) and localStorage format (endTime)
+        const sessionDate = new Date(s.completed_at || s.endTime);
         return sessionDate.toDateString() === date.toDateString();
       });
 
@@ -79,14 +106,18 @@ export default function Analytics({ onClose }) {
       if (!subjectMap[subject]) {
         subjectMap[subject] = { total: 0, correct: 0, count: 0 };
       }
-      subjectMap[subject].total += quiz.questions;
-      subjectMap[subject].correct += quiz.correct;
+      // Handle both database format (total_questions, correct_answers) and localStorage format (questions, correct)
+      const total = quiz.total_questions || quiz.questions || 0;
+      const correct = quiz.correct_answers || quiz.correct || 0;
+      
+      subjectMap[subject].total += total;
+      subjectMap[subject].correct += correct;
       subjectMap[subject].count += 1;
     });
 
     return Object.entries(subjectMap).map(([subject, data]) => ({
       subject,
-      score: Math.round((data.correct / data.total) * 100),
+      score: data.total > 0 ? Math.round((data.correct / data.total) * 100) : 0,
       attempts: data.count,
     }));
   };

@@ -4,7 +4,7 @@ import TaskManager from "./tasks.jsx";
 import Modal from "./modal.jsx";
 import ConfirmModal from "./confirmModal.jsx";
 
-function MainContent() {
+function MainContent({ isOnline, database }) {
    const [currentTime, setCurrentTime] = useState(25 * 60);
    const [timeRunning, setTimeRunning] = useState(false);
    const [modalOpen, setModalOpen] = useState(false);
@@ -578,11 +578,13 @@ function MainContent() {
             setSelectedTask={setSelectedTask}
             timeRunning={timeRunning}
             setTimeRunning={setTimeRunning}
-            resetToPomodoro={resetToPomodoro} // Pass the reset function to TaskManager
+            resetToPomodoro={resetToPomodoro}
+            database={database}
          />
 
          {modalOpen && (
             <Modal
+               isOnline={isOnline}
                grabData={getDataModal}
                openModal={toggleModal}
                initialValue={editingData?.text || ""}

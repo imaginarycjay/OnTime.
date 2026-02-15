@@ -1,7 +1,7 @@
 import { motion } from "framer-motion";
 import { useState, useEffect } from "react";
 
-export default function Modal({ grabData, openModal, initialValue = "", isEditing = false }) {
+export default function Modal({ grabData, openModal, initialValue = "", isEditing = false, isOnline = true }) {
   const MotionDiv = motion.div;
   const [inputValue, setInputValue] = useState(initialValue.name || initialValue || "");
   const [pomoTotal, setPomoTotal] = useState(initialValue.pomoTotal || 1);
@@ -13,6 +13,8 @@ export default function Modal({ grabData, openModal, initialValue = "", isEditin
   const [quizzes, setQuizzes] = useState(initialValue.quizzes || []);
   const [isGenerating, setIsGenerating] = useState(false);
   const [error, setError] = useState("");
+  const [showSubtopics, setShowSubtopics] = useState(false);
+  const [showStudyNotes, setShowStudyNotes] = useState(false);
 
   useEffect(() => {
     setInputValue(initialValue.name || initialValue || "");
@@ -36,6 +38,11 @@ export default function Modal({ grabData, openModal, initialValue = "", isEditin
   };
 
   const handleGenerate = async () => {
+    if (!isOnline) {
+      setError("No internet connection. Study pack generation requires internet access.");
+      return;
+    }
+    
     if (!specificTopic.trim()) {
       setError("Specific topic is required for study content");
       return;
@@ -47,11 +54,22 @@ export default function Modal({ grabData, openModal, initialValue = "", isEditin
       setSubtopics(response.subtopics || []);
       setStudyNotes(response.studyNotes || []);
       setQuizzes(response.quizzes || []);
+      setShowSubtopics(true);
+      setShowStudyNotes(true);
     } catch (err) {
       setError(err.message || "Failed to generate study pack");
     } finally {
       setIsGenerating(false);
     }
+  };
+
+  const handleRegenerate = () => {
+    setSubtopics([]);
+    setStudyNotes([]);
+    setQuizzes([]);
+    setShowSubtopics(false);
+    setShowStudyNotes(false);
+    handleGenerate();
   };
 
   return (
@@ -112,23 +130,116 @@ export default function Modal({ grabData, openModal, initialValue = "", isEditin
                 placeholder="Specific topic (required for study pack)"
                 required
               />
-              <button type="button" className="modal-add-butt" onClick={handleGenerate} disabled={isGenerating}>
-                {isGenerating ? "Generating..." : "Generate Study Pack"}
+              <button 
+                type="button" 
+                className="modal-add-butt" 
+                onClick={handleGenerate} 
+                disabled={isGenerating || !isOnline}
+                style={{ opacity: (!isOnline || isGenerating) ? 0.6 : 1 }}
+              >
+                {isGenerating ? "Generating..." : !isOnline ? "Offline - Cannot Generate" : "Generate Study Pack"}
               </button>
-              {error && <p className="modal-error">{error}</p>}
+              {error && <p className="modal-error" style={{ color: '#ef4444', fontSize: '0.9rem', marginTop: '0.5rem' }}>{error}</p>}
+              
               {!!subtopics.length && (
-                <textarea
-                  className="modal-textarea"
-                  value={subtopics.join("\n")}
-                  onChange={(e) => setSubtopics(e.target.value.split("\n"))}
-                />
+                <div style={{ marginTop: '1rem' }}>
+                  <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '0.5rem' }}>
+                    <button
+                      type="button"
+                      onClick={() => setShowSubtopics(!showSubtopics)}
+                      style={{ 
+                        background: 'none', 
+                        border: 'none', 
+                        color: 'white', 
+                        cursor: 'pointer',
+                        fontSize: '1rem',
+                        fontWeight: 500,
+                        display: 'flex',
+                        alignItems: 'center',
+                        gap: '0.5rem'
+                      }}
+                    >
+                      <span>{showSubtopics ? '▼' : '▶'}</span>
+                      Subtopics ({subtopics.length})
+                    </button>
+                  </div>
+                  {showSubtopics && (
+                    <textarea
+                      className="modal-textarea"
+                      value={subtopics.join("\n")}
+                      onChange={(e) => setSubtopics(e.target.value.split("\n"))}
+                      style={{ minHeight: '100px' }}
+                    />
+                  )}
+                </div>
               )}
+              
               {!!studyNotes.length && (
-                <textarea
-                  className="modal-textarea"
-                  value={studyNotes.join("\n")}
-                  onChange={(e) => setStudyNotes(e.target.value.split("\n"))}
-                />
+                <div style={{ marginTop: '1rem' }}>
+                  <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '0.5rem' }}>
+                    <button
+                      type="button"
+                      onClick={() => setShowStudyNotes(!showStudyNotes)}
+                      style={{ 
+                        background: 'none', 
+                        border: 'none', 
+                        color: 'white', 
+                        cursor: 'pointer',
+                        fontSize: '1rem',
+                        fontWeight: 500,
+                        display: 'flex',
+                        alignItems: 'center',
+                        gap: '0.5rem'
+                      }}
+                    >
+                      <span>{showStudyNotes ? '▼' : '▶'}</span>
+                      Study Notes ({studyNotes.length})
+                    </button>
+                  </div>
+                  {showStudyNotes && (
+                    <textarea
+                      className="modal-textarea"
+                      value={studyNotes.join("\n")}
+                      onChange={(e) => setStudyNotes(e.target.value.split("\n"))}
+                      style={{ minHeight: '100px' }}
+                    />
+                  )}
+                </div>
+              )}
+              
+              {!!quizzes.length && (
+                <div style={{ 
+                  marginTop: '1rem', 
+                  padding: '0.75rem', 
+                  background: 'rgba(167, 139, 250, 0.15)', 
+                  borderRadius: '8px',
+                  border: '1px solid rgba(167, 139, 250, 0.3)'
+                }}>
+                  <span style={{ color: '#a78bfa', fontWeight: 500, fontSize: '0.9rem' }}>
+                    ✓ {quizzes.length} Quiz Questions Ready
+                  </span>
+                </div>
+              )}
+              
+              {(!!subtopics.length || !!studyNotes.length || !!quizzes.length) && (
+                <button
+                  type="button"
+                  onClick={handleRegenerate}
+                  disabled={isGenerating || !isOnline}
+                  style={{ 
+                    marginTop: '1rem',
+                    padding: '0.5rem 1rem',
+                    background: 'rgba(255, 255, 255, 0.1)',
+                    border: '1px solid rgba(255, 255, 255, 0.2)',
+                    borderRadius: '6px',
+                    color: 'white',
+                    cursor: 'pointer',
+                    fontSize: '0.9rem',
+                    opacity: (!isOnline || isGenerating) ? 0.5 : 1
+                  }}
+                >
+                  🔄 Regenerate Study Pack
+                </button>
               )}
             </>
           )}

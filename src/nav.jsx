@@ -1,11 +1,12 @@
 import { motion } from "framer-motion";
 import Info from "./info.jsx";
 import Analytics from "./analytics.jsx";
-import InfoOutlineIcon from "@mui/icons-material/InfoOutline";
+import InfoOutlineIcon from "@mui/icons-material/InfoOutlined";
 import ShowChartIcon from "@mui/icons-material/ShowChart";
+import WifiOffIcon from "@mui/icons-material/WifiOff";
 
-import { useState, useEffect } from "react";
-function Navigation() {
+import { useState } from "react";
+function Navigation({ isOnline, database }) {
   const MotionNav = motion.nav;
   const [infoVisibility, setInfoVisibility] = useState(false);
   const [analyticsVisibility, setAnalyticsVisibility] = useState(false);
@@ -26,7 +27,13 @@ function Navigation() {
         className="main-nav"
       >
         <h1>KHNS OnTime</h1>
-        <div>
+        <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+          {!isOnline && (
+            <div className="offline-indicator" title="No internet connection - Study pack generation unavailable">
+              <WifiOffIcon sx={{ fontSize: 24, color: '#ef4444' }} />
+              <span className="offline-text">Offline</span>
+            </div>
+          )}
           <button onClick={openAnalytics} className="stat-button">
             <ShowChartIcon sx={{ fontSize: 32, color: "white" }} />
           </button>
@@ -36,7 +43,7 @@ function Navigation() {
         </div>
       </MotionNav>
       {infoVisibility && <Info openInfo={openInfo} />}
-      {analyticsVisibility && <Analytics onClose={openAnalytics} />}
+      {analyticsVisibility && <Analytics onClose={openAnalytics} database={database} />}
     </div>
   );
 }

@@ -7,7 +7,9 @@ import MenuBookIcon from "@mui/icons-material/MenuBook";
 import TimerIcon from "@mui/icons-material/Timer";
 import EditIcon from "@mui/icons-material/Edit";
 import DeleteIcon from "@mui/icons-material/Delete";
+import QuizIcon from "@mui/icons-material/Quiz";
 import ConfirmModal from "./confirmModal.jsx";
+import Quiz from "./quiz.jsx";
 
 export default function Task({
   taskList,
@@ -19,6 +21,7 @@ export default function Task({
   timeRunning,
   setTimeRunning,
   resetToPomodoro,
+  database,
 }) {
   const MotionLi = motion.li;
   const [showOptions, setShowOptions] = useState(false);
@@ -26,6 +29,9 @@ export default function Task({
   const [pendingTask, setPendingTask] = useState(null);
   const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
   const [pendingDeleteIndex, setPendingDeleteIndex] = useState(null);
+  const [showQuiz, setShowQuiz] = useState(false);
+  const [quizTask, setQuizTask] = useState(null);
+  const [quizAttempts, setQuizAttempts] = useState({});
 
   // func para ma delete task
   function deleteTask(index) {
@@ -102,6 +108,40 @@ export default function Task({
     setShowDeleteConfirm(false);
   };
 
+  const handleQuizClick = (task) => {
+    setQuizTask(task);
+    setShowQuiz(true);
+  };
+
+  const handleQuizClose = () => {
+    setShowQuiz(false);
+    setQuizTask(null);
+    // Refresh quiz attempts
+    loadQuizAttempts();
+  };
+
+  const handleQuizComplete = (result) => {
+    console.log('Quiz completed:', result);
+    // Refresh attempts count
+    loadQuizAttempts();
+  };
+
+  const loadQuizAttempts = () => {
+    if (!database) return;
+    
+    const attempts = {};
+    list.forEach(task => {
+      if (task.id && task.mode === 'study') {
+        attempts[task.id] = database.getQuizAttempts(task.id);
+      }
+    });
+    setQuizAttempts(attempts);
+  };
+
+  useEffect(() => {
+    loadQuizAttempts();
+  }, [database, list]);
+
   const getDeleteMessage = () => {
     if (pendingDeleteIndex === null) return "";
 
@@ -167,6 +207,25 @@ export default function Task({
                         <TimerIcon sx={{ fontSize: 16, marginRight: 0.5, verticalAlign: 'text-bottom' }} />
                       )} {task.name} ({task.pomoDone}/{task.pomoTotal})
                       <div className="task-actions">
+                        {task.mode === "study" && task.quizzes && task.quizzes.length > 0 && (
+                          <button
+                            className="quiz-task-btn"
+                            onClick={() => handleQuizClick(task)}
+                            title={
+                              task.id && quizAttempts[task.id] >= 3
+                                ? "No more attempts"
+                                : task.id && quizAttempts[task.id] > 0
+                                ? `Take Quiz (${3 - quizAttempts[task.id]} attempts left)`
+                                : "Take Quiz (3 attempts)"
+                            }
+                            disabled={task.id && quizAttempts[task.id] >= 3}
+                          >
+                            <QuizIcon sx={{ fontSize: 18 }} />
+                            {task.id && quizAttempts[task.id] > 0 && (
+                              <span className="quiz-badge">{quizAttempts[task.id]}/3</span>
+                            )}
+                          </button>
+                        )}
                         <button
                           className="select-task-btn"
                           onClick={() => handleTaskSelect(task)}
@@ -216,6 +275,14 @@ export default function Task({
           message={getDeleteMessage()}
           onConfirm={confirmDelete}
           onCancel={cancelDelete}
+        />
+      )}
+      {showQuiz && quizTask && (
+        <Quiz
+          task={quizTask}
+          onClose={handleQuizClose}
+          onComplete={handleQuizComplete}
+          database={database}
         />
       )}
     </motion.div>

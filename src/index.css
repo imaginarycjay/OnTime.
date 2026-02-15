@@ -558,12 +558,74 @@ button:hover {
   color: white;
 }
 
+.quiz-task-btn {
+  background-color: var(--secondary-bg-color);
+  cursor: pointer;
+  border: none;
+  transition: all 0.2s ease;
+  padding: 6px 10px;
+  margin-right: 0.75rem;
+  color: #a78bfa;
+  border-radius: 6px;
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.quiz-task-btn:hover:not(:disabled) {
+  background-color: rgba(167, 139, 250, 0.2);
+}
+
+.quiz-task-btn:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+  color: #999;
+}
+
+.quiz-badge {
+  font-size: 0.65rem;
+  background: #ef4444;
+  color: white;
+  border-radius: 10px;
+  padding: 1px 4px;
+  font-weight: 600;
+  position: absolute;
+  top: -4px;
+  right: -4px;
+  min-width: 16px;
+  text-align: center;
+}
+
 .stat-button {
   width: 3rem;
   background-color: var(--primary-bg-color);
   border: none;
   transition: background-color 0.4s ease;
   cursor: pointer;
+}
+
+.offline-indicator {
+  display: flex;
+  align-items: center;
+  gap: 0.35rem;
+  background: rgba(239, 68, 68, 0.15);
+  padding: 0.4rem 0.75rem;
+  border-radius: 20px;
+  border: 1px solid rgba(239, 68, 68, 0.4);
+  margin-right: 0.5rem;
+}
+
+.offline-text {
+  font-size: 0.85rem;
+  color: #ef4444;
+  font-weight: 500;
+}
+
+@media (max-width: 600px) {
+  .offline-text {
+    display: none;
+  }
 }
 
 /* Confirmation Modal Styles */

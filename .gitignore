@@ -8,9 +8,16 @@ pnpm-debug.log*
 lerna-debug.log*
 
 node_modules
+gemini-server/node_modules
 dist
 dist-ssr
 *.local
+
+# Security: API keys and environment variables
+.env
+.env.local
+.env.*.local
+gemini-server/.env
 
 # Editor directories and files
 .vscode/*
@@ -22,3 +29,9 @@ dist-ssr
 *.njsproj
 *.sln
 *.sw?
+
+# Database (if using local file-based DB in future)
+*.db
+*.sqlite
+*.sqlite3
+
