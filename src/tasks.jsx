@@ -1,13 +1,8 @@
 import { motion, AnimatePresence } from "framer-motion";
 import { useEffect, useState } from "react";
 import MoreVertIcon from "@mui/icons-material/MoreVert";
-import PlayArrowIcon from "@mui/icons-material/PlayArrow";
-import PauseIcon from "@mui/icons-material/Pause";
 import MenuBookIcon from "@mui/icons-material/MenuBook";
 import TimerIcon from "@mui/icons-material/Timer";
-import EditIcon from "@mui/icons-material/Edit";
-import DeleteIcon from "@mui/icons-material/Delete";
-import QuizIcon from "@mui/icons-material/Quiz";
 import ConfirmModal from "./confirmModal.jsx";
 import Quiz from "./quiz.jsx";
 
@@ -24,7 +19,8 @@ export default function Task({
   database,
 }) {
   const MotionLi = motion.li;
-  const [showOptions, setShowOptions] = useState(false);
+  const [showHeaderMenu, setShowHeaderMenu] = useState(false);
+  const [activeTaskMenuIndex, setActiveTaskMenuIndex] = useState(null);
   const [showSwitchConfirm, setShowSwitchConfirm] = useState(false);
   const [pendingTask, setPendingTask] = useState(null);
   const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
@@ -33,11 +29,23 @@ export default function Task({
   const [quizTask, setQuizTask] = useState(null);
   const [quizAttempts, setQuizAttempts] = useState({});
 
+  const isSameTask = (taskA, taskB) => {
+    if (!taskA || !taskB) return false;
+    if (taskA.id && taskB.id) return taskA.id === taskB.id;
+
+    return (
+      taskA.name === taskB.name &&
+      taskA.pomoTotal === taskB.pomoTotal &&
+      taskA.pomoDone === taskB.pomoDone
+    );
+  };
+
+  const isTaskDone = (task) => task.pomoDone >= task.pomoTotal;
+
   // func para ma delete task
   function deleteTask(index) {
     const taskToDelete = list[index];
-    const isRunningTask =
-      selectedTask && selectedTask.name === taskToDelete.name;
+    const isRunningTask = selectedTask && isSameTask(selectedTask, taskToDelete);
 
     // If deleting the currently running task, reset timer and clear selection
     if (isRunningTask) {
@@ -59,7 +67,84 @@ export default function Task({
   }, [list]);
 
   const handleOptionsClick = () => {
-    setShowOptions((prev) => !prev);
+    setShowHeaderMenu((prev) => !prev);
+    setActiveTaskMenuIndex(null);
+  };
+
+  const markTaskAsDone = (index) => {
+    const taskToMark = list[index];
+    if (!taskToMark || isTaskDone(taskToMark)) return;
+
+    const shouldStopRunning = selectedTask && isSameTask(selectedTask, taskToMark) && timeRunning;
+
+    setList((prevList) => {
+      const updated = [...prevList];
+      updated[index] = {
+        ...updated[index],
+        pomoDone: updated[index].pomoTotal,
+      };
+
+      if (selectedTask && isSameTask(selectedTask, taskToMark)) {
+        setSelectedTask(updated[index]);
+      }
+
+      return updated;
+    });
+
+    if (shouldStopRunning) {
+      setTimeRunning(false);
+      resetToPomodoro();
+    }
+  };
+
+  const markAllAsDone = () => {
+    if (list.length === 0) return;
+
+    setList((prevList) =>
+      prevList.map((task) => ({
+        ...task,
+        pomoDone: task.pomoTotal,
+      })),
+    );
+
+    if (selectedTask) {
+      setSelectedTask({
+        ...selectedTask,
+        pomoDone: selectedTask.pomoTotal,
+      });
+    }
+
+    if (timeRunning) {
+      setTimeRunning(false);
+      resetToPomodoro();
+    }
+
+    setShowHeaderMenu(false);
+    setActiveTaskMenuIndex(null);
+  };
+
+  const clearDoneTasks = () => {
+    const hasDoneTask = list.some((task) => isTaskDone(task));
+    if (!hasDoneTask) return;
+
+    const shouldClearSelection = selectedTask && isTaskDone(selectedTask);
+    setList((prevList) => prevList.filter((task) => !isTaskDone(task)));
+
+    if (shouldClearSelection) {
+      setSelectedTask(null);
+      if (timeRunning) {
+        setTimeRunning(false);
+        resetToPomodoro();
+      }
+    }
+
+    setShowHeaderMenu(false);
+    setActiveTaskMenuIndex(null);
+  };
+
+  const handleTaskItemClick = (index) => {
+    setShowHeaderMenu(false);
+    setActiveTaskMenuIndex((prev) => (prev === index ? null : index));
   };
 
   const handleTaskSelect = (task) => {
@@ -93,6 +178,7 @@ export default function Task({
   const handleDeleteClick = (index) => {
     setPendingDeleteIndex(index);
     setShowDeleteConfirm(true);
+    setActiveTaskMenuIndex(null);
   };
 
   const confirmDelete = () => {
@@ -111,6 +197,7 @@ export default function Task({
   const handleQuizClick = (task) => {
     setQuizTask(task);
     setShowQuiz(true);
+    setActiveTaskMenuIndex(null);
   };
 
   const handleQuizClose = () => {
@@ -142,13 +229,47 @@ export default function Task({
     loadQuizAttempts();
   }, [database, list]);
 
+  useEffect(() => {
+    const handleGlobalClick = (event) => {
+      if (
+        showHeaderMenu &&
+        !event.target.closest(".task-header-menu")
+      ) {
+        setShowHeaderMenu(false);
+      }
+
+      if (
+        activeTaskMenuIndex !== null &&
+        !event.target.closest(".task-item-menu") &&
+        !event.target.closest(".task-items")
+      ) {
+        setActiveTaskMenuIndex(null);
+      }
+    };
+
+    const handleEsc = (event) => {
+      if (event.key === "Escape") {
+        setShowHeaderMenu(false);
+        setActiveTaskMenuIndex(null);
+      }
+    };
+
+    document.addEventListener("click", handleGlobalClick);
+    document.addEventListener("keydown", handleEsc);
+
+    return () => {
+      document.removeEventListener("click", handleGlobalClick);
+      document.removeEventListener("keydown", handleEsc);
+    };
+  }, [showHeaderMenu, activeTaskMenuIndex]);
+
   const getDeleteMessage = () => {
     if (pendingDeleteIndex === null) return "";
 
     const taskToDelete = list[pendingDeleteIndex];
     const isRunningTask =
       selectedTask &&
-      selectedTask.name === taskToDelete.name &&
+      isSameTask(selectedTask, taskToDelete) &&
       timeRunning;
 
     if (isRunningTask) {
@@ -176,21 +297,51 @@ export default function Task({
       <div className="task-parent">
         <div className="task-banner-container">
           <p className="tasklist">Task List:</p>
-          <button className="vert-task-icon" onClick={handleOptionsClick}>
-            <MoreVertIcon sx={{ fontSize: 21, color: "white" }} />
-          </button>
+          <div className="task-header-menu">
+            <button
+              className="vert-task-icon"
+              onClick={handleOptionsClick}
+              aria-label="Task list actions"
+              aria-expanded={showHeaderMenu}
+            >
+              <MoreVertIcon sx={{ fontSize: 21, color: "white" }} />
+            </button>
+
+            {showHeaderMenu && (
+              <div className="task-overflow-menu" role="menu">
+                <button
+                  className="task-overflow-menu-item"
+                  onClick={markAllAsDone}
+                  disabled={list.length === 0 || list.every((task) => isTaskDone(task))}
+                >
+                  Mark all as Done
+                </button>
+                <button
+                  className="task-overflow-menu-item"
+                  onClick={clearDoneTasks}
+                  disabled={!list.some((task) => isTaskDone(task))}
+                >
+                  Clear all task
+                </button>
+              </div>
+            )}
+          </div>
         </div>
         <div className="task-card">
           <div className="task-card-wrapper">
             {taskList === 0 && (
               <h2 className="no-task-msg">Add task to see the list</h2>
             )}
-            <ul style={{ paddingLeft: "0px" }}>
-              {" "}
+            <ul className="task-list">
               <AnimatePresence>
                 {list.map((task, index) => {
-                  const isRunning =
-                    selectedTask && selectedTask.name === task.name && timeRunning;
+                  const isSelected = selectedTask && isSameTask(selectedTask, task);
+                  const done = isTaskDone(task);
+                  const canQuiz =
+                    task.mode === "study" &&
+                    task.quizzes &&
+                    task.quizzes.length > 0 &&
+                    !(task.id && quizAttempts[task.id] >= 3);
 
                   return (
                     <MotionLi
@@ -198,63 +349,80 @@ export default function Task({
                       animate={{ opacity: 1, y: 0 }}
                       exit={{ opacity: 1, x: 300 }}
                       transition={{ duration: 0.2 }}
-                      className="task-items"
+                      className={`task-items ${isSelected ? "task-selected" : ""} ${done ? "task-done" : ""}`}
                       key={index}
+                      onClick={() => handleTaskItemClick(index)}
+                      onKeyDown={(event) => {
+                        if (event.key === "Enter" || event.key === " ") {
+                          event.preventDefault();
+                          handleTaskItemClick(index);
+                        }
+                      }}
+                      role="button"
+                      tabIndex={0}
+                      aria-expanded={activeTaskMenuIndex === index}
                     >
-                      {task.mode === "study" ? (
-                        <MenuBookIcon sx={{ fontSize: 16, marginRight: 0.5, verticalAlign: 'text-bottom' }} />
-                      ) : (
-                        <TimerIcon sx={{ fontSize: 16, marginRight: 0.5, verticalAlign: 'text-bottom' }} />
-                      )} {task.name} ({task.pomoDone}/{task.pomoTotal})
-                      <div className="task-actions">
-                        {task.mode === "study" && task.quizzes && task.quizzes.length > 0 && (
-                          <button
-                            className="quiz-task-btn"
-                            onClick={() => handleQuizClick(task)}
-                            title={
-                              task.id && quizAttempts[task.id] >= 3
-                                ? "No more attempts"
-                                : task.id && quizAttempts[task.id] > 0
-                                ? `Take Quiz (${3 - quizAttempts[task.id]} attempts left)`
-                                : "Take Quiz (3 attempts)"
-                            }
-                            disabled={task.id && quizAttempts[task.id] >= 3}
-                          >
-                            <QuizIcon sx={{ fontSize: 18 }} />
-                            {task.id && quizAttempts[task.id] > 0 && (
-                              <span className="quiz-badge">{quizAttempts[task.id]}/3</span>
-                            )}
-                          </button>
+                      <div className="task-item-main">
+                        {task.mode === "study" ? (
+                          <MenuBookIcon sx={{ fontSize: 16, marginRight: 0.5, verticalAlign: "text-bottom" }} />
+                        ) : (
+                          <TimerIcon sx={{ fontSize: 16, marginRight: 0.5, verticalAlign: "text-bottom" }} />
                         )}
-                        <button
-                          className="select-task-btn"
-                          onClick={() => handleTaskSelect(task)}
-                          aria-label={isRunning ? "Selected (running)" : "Select task"}
-                          title={isRunning ? "Selected (running)" : "Select task"}
-                        >
-                          {isRunning ? (
-                            <PauseIcon sx={{ fontSize: 20 }} />
-                          ) : (
-                            <PlayArrowIcon sx={{ fontSize: 20 }} />
-                          )}
-                        </button>
-                        {showOptions && (
-                          <>
-                            <button
-                              onClick={() => editTask(index)}
-                              className="edit-task"
-                            >
-                              <EditIcon sx={{ fontSize: 18 }} />
-                            </button>
-                            <button
-                              onClick={() => handleDeleteClick(index)}
-                              className="delete-task"
-                            >
-                              <DeleteIcon sx={{ fontSize: 18 }} />
-                            </button>
-                          </>
-                        )}
+                        <span className="task-item-title">{task.name}</span>
                       </div>
+
+                      {activeTaskMenuIndex === index && (
+                        <div className="task-item-menu" role="menu" onClick={(event) => event.stopPropagation()}>
+                          <button
+                            className="task-item-menu-button"
+                            onClick={() => {
+                              handleTaskSelect(task);
+                              setActiveTaskMenuIndex(null);
+                            }}
+                          >
+                            Focus this task
+                          </button>
+                          <button
+                            className="task-item-menu-button"
+                            onClick={() => handleQuizClick(task)}
+                            disabled={!canQuiz}
+                            title={
+                              task.mode !== "study"
+                                ? "Available for study tasks only"
+                                : task.id && quizAttempts[task.id] >= 3
+                                ? "No more attempts"
+                                : "Quiz now"
+                            }
+                          >
+                            Quiz now
+                          </button>
+                          <button
+                            className="task-item-menu-button"
+                            onClick={() => {
+                              editTask(index);
+                              setActiveTaskMenuIndex(null);
+                            }}
+                          >
+                            Edit
+                          </button>
+                          <button
+                            className="task-item-menu-button"
+                            onClick={() => {
+                              markTaskAsDone(index);
+                              setActiveTaskMenuIndex(null);
+                            }}
+                            disabled={done}
+                          >
+                            Mark as Done
+                          </button>
+                          <button
+                            className="task-item-menu-button task-item-menu-danger"
+                            onClick={() => handleDeleteClick(index)}
+                          >
+                            Clear
+                          </button>
+                        </div>
+                      )}
                     </MotionLi>
                   );
                 })}
