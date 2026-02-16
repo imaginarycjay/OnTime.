@@ -29,6 +29,7 @@ Please provide the response in the following JSON format ONLY (no markdown, no c
 }
 
 Requirements:
+- Topic must be academic/school-related only
 - Subtopics should be clear learning objectives
 - Study notes should be concise and actionable
 - Quiz questions should test understanding, not just memorization

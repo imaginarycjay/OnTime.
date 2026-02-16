@@ -382,7 +382,6 @@ button:hover {
   text-align: center;
   width: 100%;
   font-weight: 200;
-  margin-top: 6rem;
 }
 
 /* modal section */
@@ -397,16 +396,19 @@ button:hover {
   justify-content: center;
   align-items: center;
   backdrop-filter: blur(3px);
+  z-index: 60;
 }
 
 .modal-container {
   background-color: var(--secondary-bg-color);
-  width: 35%;
+  width: min(560px, 92vw);
   height: auto;
+  max-height: 80vh;
   border-radius: 10px;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
+  overflow: hidden;
 }
 
 .pomoAdder {
@@ -416,18 +418,19 @@ button:hover {
 }
 
 .modal-container > form {
-  width: auto;
-  overflow: auto;
-  overflow: scroll;
+  width: 100%;
+  box-sizing: border-box;
+  overflow-x: hidden;
   overflow-y: auto;
-  height: 37%;
+  flex: 1;
   margin-top: 2rem;
+  padding: 0 1.2rem 0.5rem;
   display: flex;
-  justify-content: center;
+  justify-content: flex-start;
   align-items: center;
   flex-direction: column;
-    gap: 8px;
-    margin-bottom: 1rem;
+  gap: 8px;
+  margin-bottom: 1rem;
 }
 
 .modal-container > form > input {
@@ -448,7 +451,7 @@ button:hover {
 }
 
 .modal-buttons-container {
-  height: 23%;
+  padding: 0.75rem 0.5rem 0.85rem;
   display: flex;
   justify-content: flex-end;
   align-items: center;
@@ -645,6 +648,26 @@ button:hover {
   overflow-y: scroll;
   padding-left: 0.2rem;
   overflow-x: visible;
+}
+
+.task-action-modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.28);
+  backdrop-filter: blur(2px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 70;
+}
+
+.task-action-modal-content {
+  width: min(320px, 88vw);
+  border-radius: 12px;
+  padding: 0.5rem;
+  background: rgba(35, 35, 35, 0.97);
+  border: 1px solid rgba(255, 255, 255, 0.22);
+  box-shadow: rgba(0, 0, 0, 0.35) 0px 14px 28px;
 }
 
 .task-item-menu {
@@ -888,12 +911,10 @@ button:hover {
 @media (max-width: 768px) {
   .main-card {
     width: 100%;
-    height: 20rem;
   }
 
   .task-card {
     width: 20rem;
-    height: 20rem;
   }
 
   .task-card-wrapper {
@@ -912,6 +933,35 @@ button:hover {
     align-items: center;
   }
 
+  .main-pomodoro {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .buttons-section {
+    width: min(420px, 92vw);
+    gap: 6px;
+  }
+
+  .pomodoro-button,
+  .sbreak-button,
+  .lbreak-button {
+    width: calc((100% - 12px) / 3);
+    min-width: 0;
+    font-size: 0.86rem;
+  }
+
+  .main-card {
+    width: min(420px, 92vw);
+    margin-left: auto;
+    margin-right: auto;
+    box-sizing: border-box;
+  }
+
+ 
+
   .task-card {
     width: 320px;
     max-height: 12rem;
@@ -927,13 +977,10 @@ button:hover {
     font-size: 14px;
   }
 
-  .no-task-msg {
-    margin-top: 4rem;
-  }
-
   .modal-container {
-    width: 90%;
-    height: 25%;
+    width: 92%;
+    max-height: 80vh;
+    height: auto;
   }
 
   .info-container {

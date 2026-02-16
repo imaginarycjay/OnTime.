@@ -13,8 +13,21 @@ export default function Modal({ grabData, openModal, initialValue = "", isEditin
   const [quizzes, setQuizzes] = useState(initialValue.quizzes || []);
   const [isGenerating, setIsGenerating] = useState(false);
   const [error, setError] = useState("");
-  const [showSubtopics, setShowSubtopics] = useState(false);
-  const [showStudyNotes, setShowStudyNotes] = useState(false);
+
+  const containsBlockedTopic = (text) => {
+    const blockedPattern = /(poop|toilet|feces|shit|sex|porn|nude|gambling|drug|drugs|meth|cocaine|weapon|bomb|kill|murder)/i;
+    return blockedPattern.test(text);
+  };
+
+  const isLikelyAcademic = (subjectText, topicText) => {
+    const combined = `${subjectText || ""} ${topicText || ""}`.trim();
+    if (!combined) return false;
+    if (containsBlockedTopic(combined)) return false;
+
+    const academicPattern = /(math|algebra|geometry|calculus|statistics|physics|chemistry|biology|history|geography|economics|accounting|programming|computer science|literature|grammar|science|research|exam|lesson|theorem|equation|analysis|engineering|medicine|law|psychology|philosophy)/i;
+
+    return academicPattern.test(combined) || (combined.split(/\s+/).length >= 2 && topicText.trim().length >= 4);
+  };
 
   useEffect(() => {
     setInputValue(initialValue.name || initialValue || "");
@@ -42,6 +55,12 @@ export default function Modal({ grabData, openModal, initialValue = "", isEditin
       setError("Specific topic is required for study content");
       return;
     }
+
+    if (!isLikelyAcademic(subject, specificTopic)) {
+      setError("Study pack generation accepts academic topics only. Please enter a school-related topic.");
+      return;
+    }
+
     setError("");
     setIsGenerating(true);
     try {
@@ -49,8 +68,6 @@ export default function Modal({ grabData, openModal, initialValue = "", isEditin
       setSubtopics(response.subtopics || []);
       setStudyNotes(response.studyNotes || []);
       setQuizzes(response.quizzes || []);
-      setShowSubtopics(true);
-      setShowStudyNotes(true);
     } catch (err) {
       setError(err.message || "Failed to generate study pack");
     } finally {
@@ -62,8 +79,6 @@ export default function Modal({ grabData, openModal, initialValue = "", isEditin
     setSubtopics([]);
     setStudyNotes([]);
     setQuizzes([]);
-    setShowSubtopics(false);
-    setShowStudyNotes(false);
     handleGenerate();
   };
 
@@ -135,72 +150,6 @@ export default function Modal({ grabData, openModal, initialValue = "", isEditin
                 {isGenerating ? "Generating..." : "Generate Study Pack"}
               </button>
               {error && <p className="modal-error" style={{ color: '#ef4444', fontSize: '0.9rem', marginTop: '0.5rem' }}>{error}</p>}
-              
-              {!!subtopics.length && (
-                <div style={{ marginTop: '1rem' }}>
-                  <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '0.5rem' }}>
-                    <button
-                      type="button"
-                      onClick={() => setShowSubtopics(!showSubtopics)}
-                      style={{ 
-                        background: 'none', 
-                        border: 'none', 
-                        color: 'white', 
-                        cursor: 'pointer',
-                        fontSize: '1rem',
-                        fontWeight: 500,
-                        display: 'flex',
-                        alignItems: 'center',
-                        gap: '0.5rem'
-                      }}
-                    >
-                      <span>{showSubtopics ? '▼' : '▶'}</span>
-                      Subtopics ({subtopics.length})
-                    </button>
-                  </div>
-                  {showSubtopics && (
-                    <textarea
-                      className="modal-textarea"
-                      value={subtopics.join("\n")}
-                      onChange={(e) => setSubtopics(e.target.value.split("\n"))}
-                      style={{ minHeight: '100px' }}
-                    />
-                  )}
-                </div>
-              )}
-              
-              {!!studyNotes.length && (
-                <div style={{ marginTop: '1rem' }}>
-                  <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '0.5rem' }}>
-                    <button
-                      type="button"
-                      onClick={() => setShowStudyNotes(!showStudyNotes)}
-                      style={{ 
-                        background: 'none', 
-                        border: 'none', 
-                        color: 'white', 
-                        cursor: 'pointer',
-                        fontSize: '1rem',
-                        fontWeight: 500,
-                        display: 'flex',
-                        alignItems: 'center',
-                        gap: '0.5rem'
-                      }}
-                    >
-                      <span>{showStudyNotes ? '▼' : '▶'}</span>
-                      Study Notes ({studyNotes.length})
-                    </button>
-                  </div>
-                  {showStudyNotes && (
-                    <textarea
-                      className="modal-textarea"
-                      value={studyNotes.join("\n")}
-                      onChange={(e) => setStudyNotes(e.target.value.split("\n"))}
-                      style={{ minHeight: '100px' }}
-                    />
-                  )}
-                </div>
-              )}
               
               {!!quizzes.length && (
                 <div style={{ 

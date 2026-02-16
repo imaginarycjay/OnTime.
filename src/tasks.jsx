@@ -21,10 +21,12 @@ export default function Task({
   const MotionLi = motion.li;
   const [showHeaderMenu, setShowHeaderMenu] = useState(false);
   const [activeTaskMenuIndex, setActiveTaskMenuIndex] = useState(null);
+  const [showTaskActionModal, setShowTaskActionModal] = useState(false);
   const [showSwitchConfirm, setShowSwitchConfirm] = useState(false);
   const [pendingTask, setPendingTask] = useState(null);
   const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
   const [pendingDeleteIndex, setPendingDeleteIndex] = useState(null);
+  const [showMarkAllConfirm, setShowMarkAllConfirm] = useState(false);
   const [showQuiz, setShowQuiz] = useState(false);
   const [quizTask, setQuizTask] = useState(null);
   const [quizAttempts, setQuizAttempts] = useState({});
@@ -68,6 +70,7 @@ export default function Task({
 
   const handleOptionsClick = () => {
     setShowHeaderMenu((prev) => !prev);
+    setShowTaskActionModal(false);
     setActiveTaskMenuIndex(null);
   };
 
@@ -97,7 +100,7 @@ export default function Task({
     }
   };
 
-  const markAllAsDone = () => {
+  const runMarkAllAsDone = () => {
     if (list.length === 0) return;
 
     setList((prevList) =>
@@ -120,7 +123,18 @@ export default function Task({
     }
 
     setShowHeaderMenu(false);
+    setShowTaskActionModal(false);
     setActiveTaskMenuIndex(null);
+  };
+
+  const markAllAsDone = () => {
+    if (timeRunning && selectedTask) {
+      setShowHeaderMenu(false);
+      setShowMarkAllConfirm(true);
+      return;
+    }
+
+    runMarkAllAsDone();
   };
 
   const clearDoneTasks = () => {
@@ -139,12 +153,14 @@ export default function Task({
     }
 
     setShowHeaderMenu(false);
+    setShowTaskActionModal(false);
     setActiveTaskMenuIndex(null);
   };
 
   const handleTaskItemClick = (index) => {
     setShowHeaderMenu(false);
-    setActiveTaskMenuIndex((prev) => (prev === index ? null : index));
+    setActiveTaskMenuIndex(index);
+    setShowTaskActionModal(true);
   };
 
   const handleTaskSelect = (task) => {
@@ -178,6 +194,7 @@ export default function Task({
   const handleDeleteClick = (index) => {
     setPendingDeleteIndex(index);
     setShowDeleteConfirm(true);
+    setShowTaskActionModal(false);
     setActiveTaskMenuIndex(null);
   };
 
@@ -197,6 +214,7 @@ export default function Task({
   const handleQuizClick = (task) => {
     setQuizTask(task);
     setShowQuiz(true);
+    setShowTaskActionModal(false);
     setActiveTaskMenuIndex(null);
   };
 
@@ -239,10 +257,11 @@ export default function Task({
       }
 
       if (
-        activeTaskMenuIndex !== null &&
-        !event.target.closest(".task-item-menu") &&
-        !event.target.closest(".task-items")
+        showTaskActionModal &&
+        !event.target.closest(".task-items") &&
+        !event.target.closest(".task-action-modal-content")
       ) {
+        setShowTaskActionModal(false);
         setActiveTaskMenuIndex(null);
       }
     };
@@ -250,6 +269,7 @@ export default function Task({
     const handleEsc = (event) => {
       if (event.key === "Escape") {
         setShowHeaderMenu(false);
+        setShowTaskActionModal(false);
         setActiveTaskMenuIndex(null);
       }
     };
@@ -261,7 +281,7 @@ export default function Task({
       document.removeEventListener("click", handleGlobalClick);
       document.removeEventListener("keydown", handleEsc);
     };
-  }, [showHeaderMenu, activeTaskMenuIndex]);
+  }, [showHeaderMenu, showTaskActionModal]);
 
   const getDeleteMessage = () => {
     if (pendingDeleteIndex === null) return "";
@@ -360,7 +380,7 @@ export default function Task({
                       }}
                       role="button"
                       tabIndex={0}
-                      aria-expanded={activeTaskMenuIndex === index}
+                      aria-expanded={showTaskActionModal && activeTaskMenuIndex === index}
                     >
                       <div className="task-item-main">
                         {task.mode === "study" ? (
@@ -370,59 +390,6 @@ export default function Task({
                         )}
                         <span className="task-item-title">{task.name}</span>
                       </div>
-
-                      {activeTaskMenuIndex === index && (
-                        <div className="task-item-menu" role="menu" onClick={(event) => event.stopPropagation()}>
-                          <button
-                            className="task-item-menu-button"
-                            onClick={() => {
-                              handleTaskSelect(task);
-                              setActiveTaskMenuIndex(null);
-                            }}
-                          >
-                            Focus this task
-                          </button>
-                          <button
-                            className="task-item-menu-button"
-                            onClick={() => handleQuizClick(task)}
-                            disabled={!canQuiz}
-                            title={
-                              task.mode !== "study"
-                                ? "Available for study tasks only"
-                                : task.id && quizAttempts[task.id] >= 3
-                                ? "No more attempts"
-                                : "Quiz now"
-                            }
-                          >
-                            Quiz now
-                          </button>
-                          <button
-                            className="task-item-menu-button"
-                            onClick={() => {
-                              editTask(index);
-                              setActiveTaskMenuIndex(null);
-                            }}
-                          >
-                            Edit
-                          </button>
-                          <button
-                            className="task-item-menu-button"
-                            onClick={() => {
-                              markTaskAsDone(index);
-                              setActiveTaskMenuIndex(null);
-                            }}
-                            disabled={done}
-                          >
-                            Mark as Done
-                          </button>
-                          <button
-                            className="task-item-menu-button task-item-menu-danger"
-                            onClick={() => handleDeleteClick(index)}
-                          >
-                            Clear
-                          </button>
-                        </div>
-                      )}
                     </MotionLi>
                   );
                 })}
@@ -431,6 +398,66 @@ export default function Task({
           </div>
         </div>
       </div>
+
+      {showTaskActionModal && activeTaskMenuIndex !== null && list[activeTaskMenuIndex] && (
+        <div className="task-action-modal-overlay" onClick={() => {
+          setShowTaskActionModal(false);
+          setActiveTaskMenuIndex(null);
+        }}>
+          <div className="task-action-modal-content" role="menu" onClick={(event) => event.stopPropagation()}>
+            <button
+              className="task-item-menu-button"
+              onClick={() => {
+                handleTaskSelect(list[activeTaskMenuIndex]);
+                setShowTaskActionModal(false);
+                setActiveTaskMenuIndex(null);
+              }}
+            >
+              Focus this task
+            </button>
+            <button
+              className="task-item-menu-button"
+              onClick={() => handleQuizClick(list[activeTaskMenuIndex])}
+              disabled={
+                list[activeTaskMenuIndex].mode !== "study" ||
+                !list[activeTaskMenuIndex].quizzes ||
+                list[activeTaskMenuIndex].quizzes.length === 0 ||
+                (list[activeTaskMenuIndex].id && quizAttempts[list[activeTaskMenuIndex].id] >= 3)
+              }
+            >
+              Quiz now
+            </button>
+            <button
+              className="task-item-menu-button"
+              onClick={() => {
+                editTask(activeTaskMenuIndex);
+                setShowTaskActionModal(false);
+                setActiveTaskMenuIndex(null);
+              }}
+            >
+              Edit
+            </button>
+            <button
+              className="task-item-menu-button"
+              onClick={() => {
+                markTaskAsDone(activeTaskMenuIndex);
+                setShowTaskActionModal(false);
+                setActiveTaskMenuIndex(null);
+              }}
+              disabled={isTaskDone(list[activeTaskMenuIndex])}
+            >
+              Mark as Done
+            </button>
+            <button
+              className="task-item-menu-button task-item-menu-danger"
+              onClick={() => handleDeleteClick(activeTaskMenuIndex)}
+            >
+              Clear
+            </button>
+          </div>
+        </div>
+      )}
+
       {showSwitchConfirm && (
         <ConfirmModal
           message="Switching tasks will lose your current progress. Do you want to continue?"
@@ -443,6 +470,17 @@ export default function Task({
           message={getDeleteMessage()}
           onConfirm={confirmDelete}
           onCancel={cancelDelete}
+        />
+      )}
+      {showMarkAllConfirm && (
+        <ConfirmModal
+          message="A task is currently running. Marking all as done will stop the timer and reset Pomodoro. Continue?"
+          onConfirm={() => {
+            setShowMarkAllConfirm(false);
+            runMarkAllAsDone();
+          }}
+          onCancel={() => setShowMarkAllConfirm(false)}
+          confirmLabel="Mark all"
         />
       )}
       {showQuiz && quizTask && (
