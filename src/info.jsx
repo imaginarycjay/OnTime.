@@ -124,12 +124,12 @@ export default function Info({ openInfo }) {
               <a href="https://web.facebook.com/rie.cahh" target="_blank" className="contributor-link">
                 Erica B. Pajete
               </a>
-              <a href="https://web.facebook.com/jane.atejada.14" target="_blank" className="contributor-link">
-                Jane A. Tejada
+              <a href="https://web.facebook.com/" target="_blank" className="contributor-link">
+                Camella B. Medayo
               </a>
             </div>
             <p className="copyright">
-              OnTime 2025 (Under Development)
+              OnTime 2026 &copy; All rights reserved.
             </p>
           </section>
         </div>

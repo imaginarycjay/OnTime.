@@ -1,4 +1,8 @@
-const API_BASE_URL = import.meta.env.VITE_API_URL || "http://localhost:3001";
+// In production (Vercel) use relative URL so /api/* hits the serverless functions.
+// In local dev, fall back to the Express server at localhost:3001.
+const API_BASE_URL =
+   import.meta.env.VITE_API_URL ??
+   (import.meta.env.DEV ? "http://localhost:3001" : "");
 
 const studyApi = {
    async generateStudyPack({ subject, specificTopic }) {
@@ -70,7 +74,9 @@ const studyApi = {
          // Frontend is online but API server is not reachable
          if (err instanceof TypeError && err.message === "Failed to fetch") {
             throw new Error(
-               "Cannot reach study server at http://localhost:3001. Start gemini-server first.",
+               import.meta.env.DEV
+                  ? "Cannot reach study server at http://localhost:3001. Start gemini-server first."
+                  : "Cannot reach the study API. Please try again later.",
             );
          }
 
