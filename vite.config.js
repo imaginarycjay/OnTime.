@@ -8,6 +8,12 @@ export default defineConfig({
     react(),
     VitePWA({
       registerType: "autoUpdate",
+      workbox: {
+        skipWaiting: true,
+        clientsClaim: true,
+        navigateFallbackDenylist: [/^\/api\//],
+        runtimeCaching: [],
+      },
       manifest: {
         name: "KNHS OnTime Pomodoro",
         short_name: "OnTime.",
